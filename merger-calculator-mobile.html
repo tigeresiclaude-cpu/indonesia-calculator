@@ -173,20 +173,19 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      flex: 1;
-      min-height: 0;
+      flex-shrink: 0;
     }
     .res-box {
       background: var(--card2);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 9px 12px;
       display: flex; flex-direction: column; justify-content: center;
     }
     .res-box.accent { border-color: rgba(200,168,75,.5); background: rgba(200,168,75,.08); }
-    .res-lbl { font-family:'Cinzel',serif; font-size:.65rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
-    .res-val { font-family:'Cinzel',serif; font-size:2.6rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .res-unit { font-size:.72rem; color:var(--text-dim); margin-top:5px; }
+    .res-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:3px; }
+    .res-val { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .res-unit { font-size:.65rem; color:var(--text-dim); margin-top:3px; }
 
     /* ── LADDER ── */
     .ladder-wrap { flex-shrink: 0; }
@@ -223,25 +222,25 @@
     }
     .bid-tap {
       background: var(--card2); border: 1px solid var(--gold-dim); border-radius: 10px;
-      padding: 12px 14px; cursor: pointer; text-align: center;
+      padding: 14px 14px; cursor: pointer; text-align: center;
       display: flex; flex-direction: column; justify-content: center;
-      transition: background .15s; min-width: 88px;
+      transition: background .15s; min-width: 90px;
     }
     .bid-tap:active { background: rgba(200,168,75,.15); }
-    .bid-tap .bt-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--gold-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
-    .bid-tap .bt-val { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .bid-tap .bt-hint { font-size:.65rem; color:var(--text-dim); margin-top:4px; }
+    .bid-tap .bt-lbl { font-family:'Cinzel',serif; font-size:.62rem; color:var(--gold-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+    .bid-tap .bt-val { font-family:'Cinzel',serif; font-size:2rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .bid-tap .bt-hint { font-size:.68rem; color:var(--text-dim); margin-top:6px; }
     .bid-tap.has-val .bt-val { color:#90d060; }
 
     .split-box {
       background: var(--card2); border: 1px solid rgba(200,168,75,.2);
-      border-radius: 10px; padding: 12px 10px;
+      border-radius: 10px; padding: 14px 12px;
       display: flex; flex-direction: column; justify-content: center;
     }
-    .split-box .sp-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .split-box .sp-pct { font-size:.75rem; color:var(--text-dim); margin-bottom:4px; }
-    .split-box .sp-amt { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .split-box .sp-unit { font-size:.65rem; color:var(--text-dim); margin-top:3px; }
+    .split-box .sp-lbl { font-family:'Cinzel',serif; font-size:.62rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .split-box .sp-pct { font-size:.78rem; color:var(--text-dim); margin-bottom:5px; }
+    .split-box .sp-amt { font-family:'Cinzel',serif; font-size:2.4rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .split-box .sp-unit { font-size:.68rem; color:var(--text-dim); margin-top:4px; }
 
     /* ── FORMULA ── */
     .formula {
@@ -346,7 +345,7 @@
       <!-- Company A -->
       <div class="co-block">
         <div class="co-header">
-          <div class="co-label"><span class="co-dot" id="dot-a" style="background:#3a8a30"></span>A</div>
+          <div class="co-label"><span class="co-dot" id="dot-a" style="background:#3a8a30"></span>บริษัท A</div>
         </div>
         <div class="type-grid" id="types-a"></div>
         <div class="count-row">
@@ -360,7 +359,7 @@
       <!-- Company B -->
       <div class="co-block">
         <div class="co-header">
-          <div class="co-label"><span class="co-dot" id="dot-b" style="background:#3a8a30"></span>B</div>
+          <div class="co-label"><span class="co-dot" id="dot-b" style="background:#3a8a30"></span>บริษัท B</div>
         </div>
         <div class="type-grid" id="types-b"></div>
         <div class="count-row">
@@ -398,18 +397,18 @@
       <!-- BID + SPLIT -->
       <div class="bid-split-row">
         <div class="bid-tap" id="bid-tap" onclick="openPicker()">
-          <div class="bt-lbl">ราคาที่ชนะ</div>
+          <div class="bt-lbl">ราคาประมูล</div>
           <div class="bt-val" id="bid-display">—</div>
           <div class="bt-hint">กดเพื่อเลือก</div>
         </div>
         <div class="split-box">
-          <div class="sp-lbl" id="sp-lbl-a">เจ้าของ A</div>
+          <div class="sp-lbl" id="sp-lbl-a">ส่วนแบ่งบริษัท A</div>
           <div class="sp-pct" id="sp-pct-a">— %</div>
           <div class="sp-amt" id="sp-amt-a">—</div>
           <div class="sp-unit">รูเปียห์</div>
         </div>
         <div class="split-box">
-          <div class="sp-lbl" id="sp-lbl-b">เจ้าของ B</div>
+          <div class="sp-lbl" id="sp-lbl-b">ส่วนแบ่งบริษัท B</div>
           <div class="sp-pct" id="sp-pct-b">— %</div>
           <div class="sp-amt" id="sp-amt-b">—</div>
           <div class="sp-unit">รูเปียห์</div>
@@ -533,8 +532,8 @@ function calc() {
   const pA=total>0?(ga/total*100).toFixed(1):'0';
   const pB=total>0?(gb/total*100).toFixed(1):'0';
 
-  document.getElementById('sp-lbl-a').textContent=`A (${nameA} ${ga}ชิ้น)`;
-  document.getElementById('sp-lbl-b').textContent=`B (${nameB} ${gb}ชิ้น)`;
+  document.getElementById('sp-lbl-a').textContent=`ส่วนแบ่งบริษัท A (${nameA} ${ga}ชิ้น)`;
+  document.getElementById('sp-lbl-b').textContent=`ส่วนแบ่งบริษัท B (${nameB} ${gb}ชิ้น)`;
   document.getElementById('sp-pct-a').textContent=pA+'%';
   document.getElementById('sp-pct-b').textContent=pB+'%';
 
