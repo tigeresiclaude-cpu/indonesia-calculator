@@ -160,8 +160,10 @@
     .ladder { display:flex; flex-wrap:wrap; gap:6px; }
     .bid-pill { padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; border:1px solid; cursor:pointer; transition:transform .1s, box-shadow .1s; }
     .bid-pill:hover { transform:scale(1.09); box-shadow:0 0 8px rgba(200,168,75,.35); }
-    .bid-pill.first { background:rgba(200,168,75,.2); border-color:var(--gold); color:var(--gold-lt); }
-    .bid-pill.step  { background:rgba(255,255,255,.04); border-color:var(--border2); color:var(--text-dim); }
+    .bid-pill.first   { background:rgba(200,168,75,.2);  border-color:var(--gold);    color:var(--gold-lt); }
+    .bid-pill.current { background:rgba(200,168,75,.35); border-color:var(--gold-lt); color:var(--gold-lt); box-shadow:0 0 10px rgba(200,168,75,.3); }
+    .bid-pill.past    { background:rgba(255,255,255,.02); border-color:var(--border2); color:#4a5530; text-decoration:line-through; }
+    .bid-pill.step    { background:rgba(255,255,255,.04); border-color:var(--border2); color:var(--text-dim); }
 
     /* ── Actual bid section ── */
     .bid-section {
@@ -518,15 +520,32 @@ function calc() {
 // ── Render ladder from a starting bid ─────────────────
 function renderLadder(startBid) {
   const lbl = document.getElementById('ladder-lbl');
+
+  let displayStart, currentIdx;
+
   if (startBid === nominal) {
+    // ยังไม่มี bid — แสดงจาก nominal ปกติ
+    displayStart = nominal;
+    currentIdx = -1; // ไม่มี current highlight
     lbl.textContent = 'ขั้นบันไดการประมูล · 10 ขั้นแรก (กดเพื่อเลือก)';
   } else {
+    // ย้อนหลัง 2 ขั้น แต่ไม่ต่ำกว่า nominal
+    const maxBack = Math.floor((startBid - nominal) / increment);
+    const stepsBack = Math.min(2, maxBack);
+    displayStart = startBid - stepsBack * increment;
+    currentIdx = stepsBack;
     lbl.textContent = `ขั้นถัดไปจาก ${startBid.toLocaleString()} รูเปียห์ (กดเพื่อเลือก)`;
   }
+
   let html = '';
-  for (let i = 0; i <= 9; i++) {
-    const val = startBid + i * increment;
-    html += `<span class="bid-pill ${i===0?'first':'step'}" onclick="selectBid(${val})" title="เลือก ${val.toLocaleString()}">${val.toLocaleString()}</span>`;
+  for (let i = 0; i < 10; i++) {
+    const val = displayStart + i * increment;
+    let cls;
+    if (i === currentIdx)       cls = 'current'; // ราคาที่เลือกอยู่
+    else if (i < currentIdx)    cls = 'past';    // ขั้นที่ผ่านมาแล้ว
+    else if (currentIdx === -1 && i === 0) cls = 'first'; // nominal
+    else                        cls = 'step';
+    html += `<span class="bid-pill ${cls}" onclick="selectBid(${val})">${val.toLocaleString()}</span>`;
   }
   document.getElementById('ladder').innerHTML = html;
 }
