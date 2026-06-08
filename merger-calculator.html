@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indonesia – Merger Bid Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script:wght@700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pinyon+Script&family=Sarabun:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg:        #252d10;
@@ -34,20 +34,56 @@
     }
 
     /* ── Hero ── */
-    .hero { background:#1e2610; border-bottom:2px solid var(--gold-dim); text-align:center; padding:0 16px 24px; }
-    .hero-band { width:100%; height:6px; background:linear-gradient(90deg,var(--bg2),var(--gold-dim) 20%,var(--gold) 50%,var(--gold-dim) 80%,var(--bg2)); }
+    .hero {
+      background: #232e10;
+      border-bottom: 1px solid var(--gold-dim);
+      text-align: center;
+      padding: 0 16px 26px;
+      overflow: hidden;
+    }
     .hero-ornament { width:100%; max-width:680px; margin:0 auto; display:block; }
-    .hero-inner { border:1px solid var(--gold-dim); border-top:none; border-bottom:none; padding:10px 40px 14px; position:relative; max-width:500px; margin:0 auto; }
-    .hero-inner::before,.hero-inner::after { content:'❧'; position:absolute; color:var(--gold-dim); font-size:1.1rem; top:50%; transform:translateY(-50%); }
-    .hero-inner::before { left:10px; }
-    .hero-inner::after  { right:10px; transform:translateY(-50%) scaleX(-1); }
-    .hero-title  { font-family:'Dancing Script',cursive; font-size:clamp(2.6rem,8vw,4.2rem); color:var(--gold-lt); line-height:1; text-shadow:0 2px 16px rgba(200,168,75,.5); }
-    .hero-edition{ font-family:'Cinzel',serif; font-size:.62rem; color:var(--gold-dim); letter-spacing:.22em; text-transform:uppercase; margin-top:2px; }
-    .hero-divider{ display:flex; align-items:center; gap:10px; max-width:340px; margin:12px auto 10px; }
+    .hero-logo-wrap {
+      border-left: 1px solid var(--gold-dim);
+      border-right: 1px solid var(--gold-dim);
+      padding: 6px 48px 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-logo-wrap::before { content:'❧'; position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--gold-dim); font-size:1.1rem; }
+    .hero-logo-wrap::after  { content:'❧'; position:absolute; right:10px; top:50%; transform:translateY(-50%) scaleX(-1); color:var(--gold-dim); font-size:1.1rem; }
+    .hero-title {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(3.2rem, 10vw, 5.4rem);
+      color: #d4c070;
+      line-height: 1;
+      text-shadow: 0 1px 8px rgba(180,150,40,.3);
+    }
+    .hero-edition {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      color: #8a7a38;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .hero-divider {
+      display: flex; align-items: center; gap: 10px;
+      max-width: 300px; margin: 14px auto 0;
+    }
     .hero-divider span { flex:1; height:1px; }
     .hero-divider span:first-child { background:linear-gradient(90deg,transparent,var(--gold-dim)); }
     .hero-divider span:last-child  { background:linear-gradient(90deg,var(--gold-dim),transparent); }
-    .hero-subtitle { font-family:'Cinzel',serif; font-size:.7rem; color:var(--olive); letter-spacing:.18em; text-transform:uppercase; }
+    /* subtitle แยกออกมาชัดเจน ไม่ทับ divider */
+    .hero-subtitle {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: .68rem;
+      color: var(--olive);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
 
     /* ── Layout ── */
     .main { max-width:720px; margin:0 auto; padding:24px 16px 0; display:flex; flex-direction:column; gap:18px; }
@@ -211,38 +247,41 @@
 
 <!-- ═══ HERO ═══ -->
 <div class="hero">
-  <div class="hero-band"></div>
-  <svg class="hero-ornament" viewBox="0 0 680 48" xmlns="http://www.w3.org/2000/svg" height="48">
+  <!-- Top ornament bar -->
+  <svg class="hero-ornament" viewBox="0 0 680 44" xmlns="http://www.w3.org/2000/svg" height="44">
     <defs>
       <linearGradient id="gfade" x1="0" x2="1" y1="0" y2="0">
-        <stop offset="0%"   stop-color="#1e2610" stop-opacity="1"/>
-        <stop offset="15%"  stop-color="#c8a84b" stop-opacity="0.5"/>
-        <stop offset="50%"  stop-color="#c8a84b" stop-opacity="0.9"/>
-        <stop offset="85%"  stop-color="#c8a84b" stop-opacity="0.5"/>
-        <stop offset="100%" stop-color="#1e2610" stop-opacity="1"/>
+        <stop offset="0%"   stop-color="#232e10" stop-opacity="1"/>
+        <stop offset="15%"  stop-color="#c8a84b" stop-opacity="0.45"/>
+        <stop offset="50%"  stop-color="#c8a84b" stop-opacity="0.85"/>
+        <stop offset="85%"  stop-color="#c8a84b" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#232e10" stop-opacity="1"/>
       </linearGradient>
     </defs>
-    <line x1="0" y1="24" x2="680" y2="24" stroke="url(#gfade)" stroke-width="1"/>
-    <polygon points="340,14 350,24 340,34 330,24" fill="#c8a84b" opacity="0.8"/>
-    <polygon points="200,19 207,24 200,29 193,24" fill="#c8a84b" opacity="0.5"/>
-    <polygon points="480,19 487,24 480,29 473,24" fill="#c8a84b" opacity="0.5"/>
-    <path d="M280,24 Q265,12 250,18 Q265,18 275,24 Q265,30 250,30 Q265,36 280,24Z" fill="#c8a84b" opacity="0.35"/>
-    <path d="M400,24 Q415,12 430,18 Q415,18 405,24 Q415,30 430,30 Q415,36 400,24Z" fill="#c8a84b" opacity="0.35"/>
+    <line x1="0" y1="22" x2="680" y2="22" stroke="url(#gfade)" stroke-width="1"/>
+    <!-- center diamond -->
+    <polygon points="340,12 350,22 340,32 330,22" fill="#c8a84b" opacity="0.85"/>
+    <!-- side diamonds -->
+    <polygon points="200,17 207,22 200,27 193,22" fill="#c8a84b" opacity="0.5"/>
+    <polygon points="480,17 487,22 480,27 473,22" fill="#c8a84b" opacity="0.5"/>
+    <!-- leaf shapes -->
+    <path d="M280,22 Q265,11 250,17 Q265,17 275,22 Q265,27 250,27 Q265,33 280,22Z" fill="#c8a84b" opacity="0.35"/>
+    <path d="M400,22 Q415,11 430,17 Q415,17 405,22 Q415,27 430,27 Q415,33 400,22Z" fill="#c8a84b" opacity="0.35"/>
   </svg>
-  <div class="hero-inner">
+
+  <!-- Logo block -->
+  <div class="hero-logo-wrap">
     <div class="hero-title">Indonesia</div>
     <div class="hero-edition">Third Edition</div>
   </div>
+
+  <!-- Divider line (ไม่มี ✦ เพื่อไม่ทับคำ) -->
   <div class="hero-divider">
-    <span></span><span style="color:var(--gold);font-size:1rem">✦</span><span></span>
+    <span></span><span></span>
   </div>
-  <div class="hero-subtitle">Phase 3 · Merger Bid Calculator</div>
-  <svg class="hero-ornament" viewBox="0 0 680 32" xmlns="http://www.w3.org/2000/svg" height="32" style="margin-top:10px">
-    <line x1="0" y1="16" x2="680" y2="16" stroke="url(#gfade)" stroke-width="1"/>
-    <circle cx="340" cy="16" r="4" fill="#c8a84b" opacity="0.7"/>
-    <circle cx="300" cy="16" r="2.5" fill="#c8a84b" opacity="0.4"/>
-    <circle cx="380" cy="16" r="2.5" fill="#c8a84b" opacity="0.4"/>
-  </svg>
+
+  <!-- Subtitle แยกบรรทัดชัดเจน -->
+  <div class="hero-subtitle">Phase 3 &nbsp;·&nbsp; Merger Bid Calculator</div>
 </div>
 
 <!-- ═══ MAIN ═══ -->
@@ -346,10 +385,7 @@
 
     <div class="breakdown" id="breakdown"></div>
 
-    <div class="siap-note" id="siap-note">
-      🍱 <b>Siap Saji:</b> หลัง merge เจ้าของใหม่ต้องคืนสินค้า <b id="give-back">—</b> ชิ้น (ครึ่งหนึ่ง ปัดขึ้น) จากขอบดินแดน แล้วแทนที่ที่เหลือด้วยสินค้า Siap Saji<br>
-      ⚠️ ทำได้เฉพาะ <b>ยุค B หรือ C</b> เท่านั้น
-    </div>
+    <div class="siap-note" id="siap-note" style="display:none"></div>
   </div>
 
 </div>
@@ -440,17 +476,19 @@ function calc() {
   if (mergeType === 'siapsaji') {
     badge.className = 'merge-badge siapsaji';
     badge.textContent = '🍱 Siap Saji Merger (ข้าว + เครื่องเทศ)';
-    valuePerGood = 25;
-    siapNote.style.display = 'block';
-    document.getElementById('give-back').textContent = Math.ceil(total / 2);
+    siapNote.style.display = 'none';
+    // คำนวณแยกตามชนิด: ข้าว×20 + เครื่องเทศ×25
+    const riceCount  = selA === 'rice' ? ga : gb;
+    const spiceCount = selA === 'spice' ? ga : gb;
+    nominal = riceCount * 20 + spiceCount * 25;
   } else {
     badge.className = 'merge-badge normal';
     badge.textContent = 'Normal Merger · ' + (GOODS.find(g => g.id === selA)?.name || '');
     valuePerGood = GOODS.find(g => g.id === selA)?.value || 0;
     siapNote.style.display = 'none';
+    nominal = total * valuePerGood;
   }
 
-  nominal   = total * valuePerGood;
   increment = total; // จำนวนชิ้นรวม = ขั้น bid
 
   document.getElementById('res-nominal').textContent   = nominal.toLocaleString();
@@ -464,9 +502,14 @@ function calc() {
   const nameA = GOODS.find(g => g.id === selA)?.name || '';
   const nameB = GOODS.find(g => g.id === selB)?.name || '';
 
-  let brkLine = mergeType === 'siapsaji'
-    ? `<b>Nominal:</b> (${ga} ข้าว + ${gb} เครื่องเทศ) × 25 = <span>${nominal.toLocaleString()} รูเปียห์</span>`
-    : `<b>Nominal:</b> (${ga} + ${gb}) × ${valuePerGood} = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
+  let brkLine;
+  if (mergeType === 'siapsaji') {
+    const riceCount  = selA === 'rice' ? ga : gb;
+    const spiceCount = selA === 'spice' ? ga : gb;
+    brkLine = `<b>Nominal:</b> (${riceCount} × 20) + (${spiceCount} × 25) = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
+  } else {
+    brkLine = `<b>Nominal:</b> (${ga} + ${gb}) × ${valuePerGood} = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
+  }
 
   document.getElementById('breakdown').innerHTML = `
     ${brkLine}<br>
