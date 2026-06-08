@@ -547,10 +547,8 @@ function calc() {
   if (mergeType === 'siapsaji') {
     badge.className = 'merge-badge siapsaji';
     badge.textContent = '🍱 ข้าวกล่อง (Siap Saji) Merger · ข้าว + เครื่องเทศ';
-    // คำนวณแยกตามชนิด: ข้าว×20 + เครื่องเทศ×25
-    const riceCount  = selA === 'rice' ? ga : gb;
-    const spiceCount = selA === 'spice' ? ga : gb;
-    nominal = riceCount * 20 + spiceCount * 25;
+    // (ข้าว + เครื่องเทศ) × 25
+    nominal = total * 25;
   } else {
     badge.className = 'merge-badge normal';
     badge.textContent = 'Normal Merger · ' + (GOODS.find(g => g.id === selA)?.name || '');
@@ -573,9 +571,7 @@ function calc() {
 
   let brkLine;
   if (mergeType === 'siapsaji') {
-    const riceCount  = selA === 'rice' ? ga : gb;
-    const spiceCount = selA === 'spice' ? ga : gb;
-    brkLine = `<b>Nominal:</b> (${riceCount} × 20) + (${spiceCount} × 25) = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
+    brkLine = `<b>Nominal:</b> (${ga} + ${gb}) × 25 = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
   } else {
     brkLine = `<b>Nominal:</b> (${ga} + ${gb}) × ${valuePerGood} = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
   }
