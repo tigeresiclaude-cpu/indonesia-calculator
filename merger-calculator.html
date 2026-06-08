@@ -158,8 +158,8 @@
     /* ── Ladder ── */
     .ladder-lbl { font-family:'Cinzel',serif; font-size:.62rem; color:var(--text-dim); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
     .ladder { display:flex; flex-wrap:wrap; gap:6px; }
-    .bid-pill { padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; border:1px solid; cursor:default; transition:transform .1s; }
-    .bid-pill:hover { transform:scale(1.07); }
+    .bid-pill { padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; border:1px solid; cursor:pointer; transition:transform .1s, box-shadow .1s; }
+    .bid-pill:hover { transform:scale(1.09); box-shadow:0 0 8px rgba(200,168,75,.35); }
     .bid-pill.first { background:rgba(200,168,75,.2); border-color:var(--gold); color:var(--gold-lt); }
     .bid-pill.step  { background:rgba(255,255,255,.04); border-color:var(--border2); color:var(--text-dim); }
 
@@ -519,16 +519,23 @@ function calc() {
 function renderLadder(startBid) {
   const lbl = document.getElementById('ladder-lbl');
   if (startBid === nominal) {
-    lbl.textContent = 'ขั้นบันไดการประมูล · 10 ขั้นแรก';
+    lbl.textContent = 'ขั้นบันไดการประมูล · 10 ขั้นแรก (กดเพื่อเลือก)';
   } else {
-    lbl.textContent = `ขั้นถัดไปจาก ${startBid.toLocaleString()} รูเปียห์`;
+    lbl.textContent = `ขั้นถัดไปจาก ${startBid.toLocaleString()} รูเปียห์ (กดเพื่อเลือก)`;
   }
   let html = '';
   for (let i = 0; i <= 9; i++) {
     const val = startBid + i * increment;
-    html += `<span class="bid-pill ${i===0?'first':'step'}">${val.toLocaleString()}</span>`;
+    html += `<span class="bid-pill ${i===0?'first':'step'}" onclick="selectBid(${val})" title="เลือก ${val.toLocaleString()}">${val.toLocaleString()}</span>`;
   }
   document.getElementById('ladder').innerHTML = html;
+}
+
+function selectBid(val) {
+  document.getElementById('bid-actual').value = val;
+  calcSplit();
+  // scroll ไปที่ช่อง bid บน mobile
+  document.getElementById('bid-actual').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // ── Split calc (called when bid input changes) ─────────
