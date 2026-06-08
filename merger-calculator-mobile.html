@@ -27,14 +27,14 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Sarabun', sans-serif;
-      overflow: hidden; /* ไม่ scroll — จบในหน้าเดียว */
+      overflow: hidden;
     }
 
     /* ══ LAYOUT ══ */
     .page {
       display: flex;
       flex-direction: column;
-      height: 100dvh; /* dynamic viewport height */
+      height: 100dvh;
       padding: 0;
     }
 
@@ -43,49 +43,49 @@
       background: #1e2810;
       border-bottom: 1px solid var(--gold-dim);
       text-align: center;
-      padding: 8px 12px 7px;
+      padding: 10px 12px 9px;
       flex-shrink: 0;
     }
     .hero-title {
       font-family: 'Pinyon Script', cursive;
-      font-size: 2.6rem;
+      font-size: 3rem;
       color: #d4c070;
       line-height: 1;
     }
     .hero-edition {
       font-family: 'Cinzel', serif;
-      font-size: .5rem;
+      font-size: .6rem;
       color: #6a5a28;
       letter-spacing: .24em;
       text-transform: uppercase;
     }
     .hero-sub {
       font-family: 'Cinzel', serif;
-      font-size: .55rem;
+      font-size: .65rem;
       color: var(--olive);
       letter-spacing: .14em;
       text-transform: uppercase;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
-    /* ── BODY SCROLL AREA ── */
+    /* ── BODY ── */
     .body {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      padding: 8px 10px;
+      gap: 8px;
+      padding: 10px 12px;
       overflow: hidden;
     }
 
     /* ── BADGE ── */
     .badge {
       text-align: center;
-      padding: 5px 10px;
-      border-radius: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
-      font-size: .62rem;
-      letter-spacing: .07em;
+      font-size: .78rem;
+      letter-spacing: .06em;
       border: 1px solid;
       flex-shrink: 0;
     }
@@ -93,7 +93,7 @@
     .badge.siapsaji { background:rgba(210,120,40,.12); border-color:#a05020; color:#d4905a; }
     .badge.invalid  { background:rgba(180,40,30,.12); border-color:#802020; color:#c05040; }
 
-    /* ── COMPANIES ROW ── */
+    /* ── COMPANIES ROW (compact — ไม่ขยาย) ── */
     .companies-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -109,7 +109,6 @@
     .co-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       margin-bottom: 6px;
     }
     .co-label {
@@ -160,45 +159,56 @@
       font-family: 'Cinzel', serif;
     }
 
+    /* ── MONEY SECTION (ส่วนเงิน — ขยายเต็มพื้นที่ที่เหลือ) ── */
+    .money-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+
     /* ── RESULTS ROW ── */
     .results-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      flex-shrink: 0;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
     }
     .res-box {
       background: var(--card2);
       border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 7px 10px;
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .res-box.accent { border-color: rgba(200,168,75,.45); background: rgba(200,168,75,.07); }
-    .res-lbl { font-family:'Cinzel',serif; font-size:.5rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:2px; }
-    .res-val { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .res-unit { font-size:.6rem; color:var(--text-dim); }
+    .res-box.accent { border-color: rgba(200,168,75,.5); background: rgba(200,168,75,.08); }
+    .res-lbl { font-family:'Cinzel',serif; font-size:.65rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+    .res-val { font-family:'Cinzel',serif; font-size:2.6rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .res-unit { font-size:.72rem; color:var(--text-dim); margin-top:5px; }
 
     /* ── LADDER ── */
     .ladder-wrap { flex-shrink: 0; }
     .ladder-lbl {
-      font-family:'Cinzel',serif; font-size:.55rem; color:var(--text-dim);
-      letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px;
+      font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim);
+      letter-spacing:.07em; text-transform:uppercase; margin-bottom:6px;
     }
     .ladder {
-      display: flex; gap: 5px;
-      overflow-x: auto; padding-bottom: 3px;
+      display: flex; gap: 6px;
+      overflow-x: auto; padding-bottom: 2px;
       scrollbar-width: none;
     }
     .ladder::-webkit-scrollbar { display:none; }
     .bid-pill {
-      padding: 4px 10px; border-radius: 16px; border: 1px solid;
-      font-family:'Cinzel',serif; font-size:.75rem; font-weight:700;
+      padding: 7px 14px; border-radius: 18px; border: 1px solid;
+      font-family:'Cinzel',serif; font-size:.88rem; font-weight:700;
       cursor: pointer; white-space: nowrap; flex-shrink: 0;
       transition: transform .1s;
     }
     .bid-pill:active { transform: scale(.95); }
     .bid-pill.first   { background:rgba(200,168,75,.2); border-color:var(--gold); color:var(--gold-lt); }
-    .bid-pill.current { background:rgba(200,168,75,.35); border-color:var(--gold-lt); color:var(--gold-lt); box-shadow:0 0 8px rgba(200,168,75,.3); }
+    .bid-pill.current { background:rgba(200,168,75,.35); border-color:var(--gold-lt); color:var(--gold-lt); box-shadow:0 0 10px rgba(200,168,75,.35); }
     .bid-pill.past    { background:rgba(255,255,255,.02); border-color:var(--border); color:#4a5530; text-decoration:line-through; }
     .bid-pill.step    { background:rgba(255,255,255,.04); border-color:var(--border); color:var(--text-dim); }
 
@@ -206,34 +216,36 @@
     .bid-split-row {
       display: grid;
       grid-template-columns: auto 1fr 1fr;
-      gap: 7px;
+      gap: 8px;
       align-items: stretch;
-      flex-shrink: 0;
+      flex: 1;
+      min-height: 0;
     }
     .bid-tap {
-      background: var(--card2); border: 1px solid var(--gold-dim); border-radius: 8px;
-      padding: 7px 10px; cursor: pointer; text-align: center;
+      background: var(--card2); border: 1px solid var(--gold-dim); border-radius: 10px;
+      padding: 12px 14px; cursor: pointer; text-align: center;
       display: flex; flex-direction: column; justify-content: center;
-      transition: background .15s; min-width: 80px;
+      transition: background .15s; min-width: 88px;
     }
     .bid-tap:active { background: rgba(200,168,75,.15); }
-    .bid-tap .bt-lbl { font-family:'Cinzel',serif; font-size:.5rem; color:var(--gold-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:3px; }
-    .bid-tap .bt-val { font-family:'Cinzel',serif; font-size:1.1rem; font-weight:700; color:var(--gold-lt); }
-    .bid-tap .bt-hint { font-size:.6rem; color:var(--text-dim); margin-top:1px; }
+    .bid-tap .bt-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--gold-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+    .bid-tap .bt-val { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .bid-tap .bt-hint { font-size:.65rem; color:var(--text-dim); margin-top:4px; }
     .bid-tap.has-val .bt-val { color:#90d060; }
 
     .split-box {
       background: var(--card2); border: 1px solid rgba(200,168,75,.2);
-      border-radius: 8px; padding: 7px 8px;
+      border-radius: 10px; padding: 12px 10px;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .split-box .sp-lbl { font-family:'Cinzel',serif; font-size:.5rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .split-box .sp-pct { font-size:.65rem; color:var(--text-dim); }
-    .split-box .sp-amt { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; color:var(--gold-lt); line-height:1.1; }
-    .split-box .sp-unit { font-size:.58rem; color:var(--text-dim); }
+    .split-box .sp-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .split-box .sp-pct { font-size:.75rem; color:var(--text-dim); margin-bottom:4px; }
+    .split-box .sp-amt { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .split-box .sp-unit { font-size:.65rem; color:var(--text-dim); margin-top:3px; }
 
     /* ── FORMULA ── */
     .formula {
-      font-size: .7rem; color: var(--text-dim); line-height: 1.6;
+      font-size: .75rem; color: var(--text-dim); line-height: 1.6;
       flex-shrink: 0;
     }
     .formula span { color: var(--text); }
@@ -360,49 +372,54 @@
       </div>
     </div>
 
-    <!-- RESULTS -->
-    <div class="results-row">
-      <div class="res-box accent">
-        <div class="res-lbl">Nominal (ขั้นต่ำ)</div>
-        <div class="res-val" id="res-nominal">—</div>
-        <div class="res-unit">รูเปียห์</div>
-      </div>
-      <div class="res-box">
-        <div class="res-lbl">Increment (+/ขั้น)</div>
-        <div class="res-val" id="res-increment">—</div>
-        <div class="res-unit">รูเปียห์</div>
-      </div>
-    </div>
+    <!-- MONEY SECTION -->
+    <div class="money-section">
 
-    <!-- LADDER -->
-    <div class="ladder-wrap">
-      <div class="ladder-lbl" id="ladder-lbl">ขั้นบันไดการประมูล (กดเพื่อเลือก)</div>
-      <div class="ladder" id="ladder"></div>
-    </div>
+      <!-- RESULTS -->
+      <div class="results-row">
+        <div class="res-box accent">
+          <div class="res-lbl">Nominal (ขั้นต่ำ)</div>
+          <div class="res-val" id="res-nominal">—</div>
+          <div class="res-unit">รูเปียห์</div>
+        </div>
+        <div class="res-box">
+          <div class="res-lbl">Increment (+/ขั้น)</div>
+          <div class="res-val" id="res-increment">—</div>
+          <div class="res-unit">รูเปียห์</div>
+        </div>
+      </div>
 
-    <!-- BID + SPLIT -->
-    <div class="bid-split-row">
-      <div class="bid-tap" id="bid-tap" onclick="openPicker()">
-        <div class="bt-lbl">ราคาที่ชนะ</div>
-        <div class="bt-val" id="bid-display">—</div>
-        <div class="bt-hint">กดเพื่อเลือก</div>
+      <!-- LADDER -->
+      <div class="ladder-wrap">
+        <div class="ladder-lbl" id="ladder-lbl">ขั้นบันไดการประมูล (กดเพื่อเลือก)</div>
+        <div class="ladder" id="ladder"></div>
       </div>
-      <div class="split-box">
-        <div class="sp-lbl" id="sp-lbl-a">เจ้าของ A</div>
-        <div class="sp-pct" id="sp-pct-a">— %</div>
-        <div class="sp-amt" id="sp-amt-a">—</div>
-        <div class="sp-unit">รูเปียห์</div>
-      </div>
-      <div class="split-box">
-        <div class="sp-lbl" id="sp-lbl-b">เจ้าของ B</div>
-        <div class="sp-pct" id="sp-pct-b">— %</div>
-        <div class="sp-amt" id="sp-amt-b">—</div>
-        <div class="sp-unit">รูเปียห์</div>
-      </div>
-    </div>
 
-    <!-- FORMULA -->
-    <div class="formula" id="formula"></div>
+      <!-- BID + SPLIT -->
+      <div class="bid-split-row">
+        <div class="bid-tap" id="bid-tap" onclick="openPicker()">
+          <div class="bt-lbl">ราคาที่ชนะ</div>
+          <div class="bt-val" id="bid-display">—</div>
+          <div class="bt-hint">กดเพื่อเลือก</div>
+        </div>
+        <div class="split-box">
+          <div class="sp-lbl" id="sp-lbl-a">เจ้าของ A</div>
+          <div class="sp-pct" id="sp-pct-a">— %</div>
+          <div class="sp-amt" id="sp-amt-a">—</div>
+          <div class="sp-unit">รูเปียห์</div>
+        </div>
+        <div class="split-box">
+          <div class="sp-lbl" id="sp-lbl-b">เจ้าของ B</div>
+          <div class="sp-pct" id="sp-pct-b">— %</div>
+          <div class="sp-amt" id="sp-amt-b">—</div>
+          <div class="sp-unit">รูเปียห์</div>
+        </div>
+      </div>
+
+      <!-- FORMULA -->
+      <div class="formula" id="formula"></div>
+
+    </div><!-- /money-section -->
 
   </div>
 </div>
