@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indonesia – Merger Bid Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script:wght@700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #252d10;
+      --bg2:       #1e2610;
+      --card:      #2e3918;
+      --card2:     #283215;
+      --border:    #6b7a38;
+      --border2:   #4a5520;
+      --gold:      #c8a84b;
+      --gold-lt:   #e2c87a;
+      --gold-dim:  #8a7230;
+      --olive:     #7a8c3a;
+      --text:      #e8dba0;
+      --text-dim:  #8a9050;
+      --red:       #c0392b;
+      --green:     #2ecc71;
+      --shadow:    0 6px 30px rgba(0,0,0,0.7);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sarabun', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── Hero ── */
+    .hero { background:#1e2610; border-bottom:2px solid var(--gold-dim); text-align:center; padding:0 16px 24px; }
+    .hero-band { width:100%; height:6px; background:linear-gradient(90deg,var(--bg2),var(--gold-dim) 20%,var(--gold) 50%,var(--gold-dim) 80%,var(--bg2)); }
+    .hero-ornament { width:100%; max-width:680px; margin:0 auto; display:block; }
+    .hero-inner { border:1px solid var(--gold-dim); border-top:none; border-bottom:none; padding:10px 40px 14px; position:relative; max-width:500px; margin:0 auto; }
+    .hero-inner::before,.hero-inner::after { content:'❧'; position:absolute; color:var(--gold-dim); font-size:1.1rem; top:50%; transform:translateY(-50%); }
+    .hero-inner::before { left:10px; }
+    .hero-inner::after  { right:10px; transform:translateY(-50%) scaleX(-1); }
+    .hero-title  { font-family:'Dancing Script',cursive; font-size:clamp(2.6rem,8vw,4.2rem); color:var(--gold-lt); line-height:1; text-shadow:0 2px 16px rgba(200,168,75,.5); }
+    .hero-edition{ font-family:'Cinzel',serif; font-size:.62rem; color:var(--gold-dim); letter-spacing:.22em; text-transform:uppercase; margin-top:2px; }
+    .hero-divider{ display:flex; align-items:center; gap:10px; max-width:340px; margin:12px auto 10px; }
+    .hero-divider span { flex:1; height:1px; }
+    .hero-divider span:first-child { background:linear-gradient(90deg,transparent,var(--gold-dim)); }
+    .hero-divider span:last-child  { background:linear-gradient(90deg,var(--gold-dim),transparent); }
+    .hero-subtitle { font-family:'Cinzel',serif; font-size:.7rem; color:var(--olive); letter-spacing:.18em; text-transform:uppercase; }
+
+    /* ── Layout ── */
+    .main { max-width:720px; margin:0 auto; padding:24px 16px 0; display:flex; flex-direction:column; gap:18px; }
+
+    /* ── Cards ── */
+    .card { background:var(--card); border:1px solid var(--border2); border-radius:10px; padding:18px 20px; box-shadow:var(--shadow); }
+    .card-title { font-family:'Cinzel',serif; color:var(--gold); font-size:.82rem; letter-spacing:.1em; margin-bottom:14px; display:flex; align-items:center; gap:8px; text-transform:uppercase; }
+    .card-title .dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .companies { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:500px){ .companies{grid-template-columns:1fr;} }
+    .company-block { background:var(--card2); border:1px solid var(--border2); border-radius:8px; padding:14px; }
+    .company-label { font-family:'Cinzel',serif; font-size:.65rem; color:var(--text-dim); margin-bottom:10px; letter-spacing:.1em; text-transform:uppercase; }
+
+    .good-type-row { margin-bottom:7px; }
+    .good-type-row label { display:flex; align-items:center; gap:7px; cursor:pointer; font-size:.88rem; }
+    .good-type-row input[type=radio] { accent-color:var(--gold); cursor:pointer; }
+    .good-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:20px; font-size:.78rem; font-weight:600; border:1px solid; }
+
+    .goods-input-row { display:flex; align-items:center; gap:8px; margin-top:14px; }
+    .goods-input-row label { font-size:.82rem; color:var(--text-dim); flex-shrink:0; }
+    .goods-input {
+      width:68px; background:#171f08; border:1px solid var(--gold-dim); border-radius:6px;
+      color:var(--gold-lt); font-size:1.2rem; font-weight:700; text-align:center;
+      padding:5px 4px; outline:none; transition:border-color .15s; font-family:'Cinzel',serif;
+    }
+    .goods-input:focus { border-color:var(--gold); }
+    .stepper { display:flex; gap:4px; }
+    .step-btn {
+      width:28px; height:28px; border-radius:5px; border:1px solid var(--border2);
+      background:#1e2610; color:var(--gold-lt); font-size:1rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; transition:background .15s;
+    }
+    .step-btn:hover { background:rgba(200,168,75,.18); }
+
+    /* ── Merger type badge ── */
+    .merge-badge {
+      text-align:center;
+      padding:8px 12px;
+      border-radius:8px;
+      font-family:'Cinzel',serif;
+      font-size:.72rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      border:1px solid;
+      transition:all .3s;
+    }
+    .merge-badge.normal   { background:rgba(200,168,75,.1); border-color:var(--gold-dim); color:var(--gold); }
+    .merge-badge.siapsaji { background:rgba(210,120,40,.12); border-color:#a05020; color:#d4905a; }
+    .merge-badge.invalid  { background:rgba(180,40,30,.12); border-color:#802020; color:#c05040; }
+
+    /* ── Result card ── */
+    .result-card {
+      background:var(--card2); border:1px solid var(--gold-dim); border-radius:10px;
+      padding:20px 20px 16px; box-shadow:var(--shadow),0 0 40px rgba(200,168,75,.05);
+      position:relative; overflow:hidden;
+    }
+    .result-card::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(200,168,75,.04) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    .result-title { font-family:'Cinzel',serif; color:var(--gold-lt); font-size:.82rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:16px; }
+
+    .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    @media(max-width:460px){ .result-grid{grid-template-columns:1fr;} }
+    .result-box { background:rgba(0,0,0,.3); border-radius:8px; padding:13px 14px; border:1px solid rgba(200,168,75,.15); }
+    .result-box .lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); margin-bottom:5px; letter-spacing:.1em; text-transform:uppercase; }
+    .result-box .val { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+    .result-box .unit { font-size:.68rem; color:var(--text-dim); margin-top:3px; }
+    .result-box.accent { border-color:rgba(200,168,75,.45); background:rgba(200,168,75,.07); }
+
+    /* ── Ladder ── */
+    .ladder-lbl { font-family:'Cinzel',serif; font-size:.62rem; color:var(--text-dim); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+    .ladder { display:flex; flex-wrap:wrap; gap:6px; }
+    .bid-pill { padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; border:1px solid; cursor:default; transition:transform .1s; }
+    .bid-pill:hover { transform:scale(1.07); }
+    .bid-pill.first { background:rgba(200,168,75,.2); border-color:var(--gold); color:var(--gold-lt); }
+    .bid-pill.step  { background:rgba(255,255,255,.04); border-color:var(--border2); color:var(--text-dim); }
+
+    /* ── Actual bid section ── */
+    .bid-section {
+      margin-top:18px; padding-top:16px;
+      border-top:1px solid var(--border2);
+    }
+    .bid-section-title {
+      font-family:'Cinzel',serif; font-size:.72rem; color:var(--gold);
+      letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px;
+    }
+    .bid-input-row {
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .bid-input-row label { font-size:.85rem; color:var(--text-dim); flex-shrink:0; }
+    .bid-actual {
+      width:110px; background:#171f08; border:1px solid var(--gold-dim);
+      border-radius:6px; color:var(--gold-lt); font-size:1.2rem; font-weight:700;
+      text-align:center; padding:6px 8px; outline:none; transition:border-color .15s;
+      font-family:'Cinzel',serif;
+    }
+    .bid-actual:focus { border-color:var(--gold); }
+    .bid-actual.invalid-bid { border-color:var(--red); color:#e07060; }
+    .bid-actual.valid-bid   { border-color:#4a8a30; color:#90d060; }
+
+    .bid-error {
+      font-size:.78rem; color:#d06050;
+      padding:4px 0;
+      display:none;
+    }
+    .bid-error.show { display:block; }
+
+    /* ── Split result ── */
+    .split-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+      margin-top:14px;
+    }
+    @media(max-width:460px){ .split-grid{grid-template-columns:1fr;} }
+    .split-box {
+      background:rgba(0,0,0,.35); border-radius:8px;
+      padding:12px 14px; border:1px solid var(--border2);
+    }
+    .split-box .s-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+    .split-box .s-pct { font-size:.75rem; color:var(--text-dim); margin-bottom:2px; }
+    .split-box .s-amount {
+      font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700;
+      color:var(--gold-lt); line-height:1.1;
+    }
+    .split-box .s-unit { font-size:.65rem; color:var(--text-dim); margin-top:2px; }
+    .split-box.a-box { border-color:rgba(200,168,75,.3); }
+    .split-box.b-box { border-color:rgba(200,168,75,.3); }
+    .split-box.same  { /* same owner — dim */ opacity:.6; }
+
+    /* ── Siap note ── */
+    .siap-note {
+      background:rgba(180,120,30,.1); border:1px solid rgba(180,120,30,.35);
+      border-radius:7px; padding:8px 12px; font-size:.78rem; color:#d4a060;
+      margin-top:12px; line-height:1.6; display:none;
+    }
+
+    /* ── Breakdown text ── */
+    .breakdown { margin-top:14px; font-size:.82rem; color:var(--text-dim); line-height:1.9; border-top:1px solid var(--border2); padding-top:12px; }
+    .breakdown span { color:var(--text); }
+    .breakdown b { color:var(--gold); font-weight:600; }
+
+    /* ── Good colors ── */
+    .c-ship    {background:#152840;color:#7ec0e8;border-color:#1e5080;}
+    .c-rice    {background:#1e3010;color:#90c060;border-color:#2a5015;}
+    .c-spice   {background:#302010;color:#d4a030;border-color:#604010;}
+    .c-rubber  {background:#281028;color:#c080b8;border-color:#603060;}
+    .c-siapsaji{background:#301808;color:#e09050;border-color:#603010;}
+    .c-oil     {background:#181818;color:#909090;border-color:#404040;}
+    .dot-ship    {background:#2980b9;}
+    .dot-rice    {background:#3a8a30;}
+    .dot-spice   {background:#c09020;}
+    .dot-rubber  {background:#8040a0;}
+    .dot-siapsaji{background:#d06020;}
+    .dot-oil     {background:#707070;}
+
+    footer { text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid var(--border2); color:var(--text-dim); font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.15em; opacity:.5; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-band"></div>
+  <svg class="hero-ornament" viewBox="0 0 680 48" xmlns="http://www.w3.org/2000/svg" height="48">
+    <defs>
+      <linearGradient id="gfade" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0%"   stop-color="#1e2610" stop-opacity="1"/>
+        <stop offset="15%"  stop-color="#c8a84b" stop-opacity="0.5"/>
+        <stop offset="50%"  stop-color="#c8a84b" stop-opacity="0.9"/>
+        <stop offset="85%"  stop-color="#c8a84b" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#1e2610" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <line x1="0" y1="24" x2="680" y2="24" stroke="url(#gfade)" stroke-width="1"/>
+    <polygon points="340,14 350,24 340,34 330,24" fill="#c8a84b" opacity="0.8"/>
+    <polygon points="200,19 207,24 200,29 193,24" fill="#c8a84b" opacity="0.5"/>
+    <polygon points="480,19 487,24 480,29 473,24" fill="#c8a84b" opacity="0.5"/>
+    <path d="M280,24 Q265,12 250,18 Q265,18 275,24 Q265,30 250,30 Q265,36 280,24Z" fill="#c8a84b" opacity="0.35"/>
+    <path d="M400,24 Q415,12 430,18 Q415,18 405,24 Q415,30 430,30 Q415,36 400,24Z" fill="#c8a84b" opacity="0.35"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="hero-title">Indonesia</div>
+    <div class="hero-edition">Third Edition</div>
+  </div>
+  <div class="hero-divider">
+    <span></span><span style="color:var(--gold);font-size:1rem">✦</span><span></span>
+  </div>
+  <div class="hero-subtitle">Phase 3 · Merger Bid Calculator</div>
+  <svg class="hero-ornament" viewBox="0 0 680 32" xmlns="http://www.w3.org/2000/svg" height="32" style="margin-top:10px">
+    <line x1="0" y1="16" x2="680" y2="16" stroke="url(#gfade)" stroke-width="1"/>
+    <circle cx="340" cy="16" r="4" fill="#c8a84b" opacity="0.7"/>
+    <circle cx="300" cy="16" r="2.5" fill="#c8a84b" opacity="0.4"/>
+    <circle cx="380" cy="16" r="2.5" fill="#c8a84b" opacity="0.4"/>
+  </svg>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- Merger type badge (auto) -->
+  <div class="merge-badge normal" id="merge-badge">Normal Merger</div>
+
+  <!-- Company A -->
+  <div class="card">
+    <div class="card-title"><span class="dot" id="dot-a" style="background:#3a8a30"></span><span id="title-a">Company A · ข้าว (Rice)</span></div>
+    <div class="companies">
+      <div class="company-block">
+        <div class="company-label">ประเภทสินค้า</div>
+        <div id="types-a"></div>
+      </div>
+      <div class="company-block">
+        <div class="company-label">จำนวนสินค้าบนกระดาน</div>
+        <div class="goods-input-row">
+          <label>จำนวน</label>
+          <div class="stepper">
+            <button class="step-btn" onclick="step('a',-1)">−</button>
+            <input class="goods-input" id="goods-a" type="number" min="1" max="30" value="3" oninput="calc()"/>
+            <button class="step-btn" onclick="step('a',1)">+</button>
+          </div>
+          <label>ชิ้น</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Company B -->
+  <div class="card">
+    <div class="card-title"><span class="dot" id="dot-b" style="background:#3a8a30"></span><span id="title-b">Company B · ข้าว (Rice)</span></div>
+    <div class="companies">
+      <div class="company-block">
+        <div class="company-label">ประเภทสินค้า</div>
+        <div id="types-b"></div>
+      </div>
+      <div class="company-block">
+        <div class="company-label">จำนวนสินค้าบนกระดาน</div>
+        <div class="goods-input-row">
+          <label>จำนวน</label>
+          <div class="stepper">
+            <button class="step-btn" onclick="step('b',-1)">−</button>
+            <input class="goods-input" id="goods-b" type="number" min="1" max="30" value="5" oninput="calc()"/>
+            <button class="step-btn" onclick="step('b',1)">+</button>
+          </div>
+          <label>ชิ้น</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-card" id="result-card">
+    <div class="result-title">✦ ผลการคำนวณ</div>
+
+    <div class="result-grid">
+      <div class="result-box accent">
+        <div class="lbl">Nominal Value (ราคาขั้นต่ำ)</div>
+        <div class="val" id="res-nominal">—</div>
+        <div class="unit">รูเปียห์</div>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Increment (เพิ่มได้ครั้งละ)</div>
+        <div class="val" id="res-increment">—</div>
+        <div class="unit">รูเปียห์ / ขั้น</div>
+      </div>
+    </div>
+
+    <div class="ladder-lbl" id="ladder-lbl">ขั้นบันไดการประมูล · 10 ขั้นแรก</div>
+    <div class="ladder" id="ladder"></div>
+
+    <!-- Actual bid input -->
+    <div class="bid-section">
+      <div class="bid-section-title">✦ ราคาที่ประมูลได้จริง</div>
+      <div class="bid-input-row">
+        <label>ราคาที่ชนะ</label>
+        <input class="bid-actual" id="bid-actual" type="number" min="0" placeholder="0" oninput="calcSplit()"/>
+        <label>รูเปียห์</label>
+      </div>
+      <div class="bid-error" id="bid-error"></div>
+
+      <!-- Split result -->
+      <div class="split-grid" id="split-grid">
+        <div class="split-box a-box">
+          <div class="s-lbl" id="split-lbl-a">เจ้าของ A</div>
+          <div class="s-pct" id="split-pct-a">— %</div>
+          <div class="s-amount" id="split-amt-a">—</div>
+          <div class="s-unit">รูเปียห์</div>
+        </div>
+        <div class="split-box b-box">
+          <div class="s-lbl" id="split-lbl-b">เจ้าของ B</div>
+          <div class="s-pct" id="split-pct-b">— %</div>
+          <div class="s-amount" id="split-amt-b">—</div>
+          <div class="s-unit">รูเปียห์</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown" id="breakdown"></div>
+
+    <div class="siap-note" id="siap-note">
+      🍱 <b>Siap Saji:</b> หลัง merge เจ้าของใหม่ต้องคืนสินค้า <b id="give-back">—</b> ชิ้น (ครึ่งหนึ่ง ปัดขึ้น) จากขอบดินแดน แล้วแทนที่ที่เหลือด้วยสินค้า Siap Saji<br>
+      ⚠️ ทำได้เฉพาะ <b>ยุค B หรือ C</b> เท่านั้น
+    </div>
+  </div>
+
+</div>
+
+<footer>Indonesia Board Game · Third Edition · Phase 3 Merger Calculator</footer>
+
+<script>
+const GOODS = [
+  {id:'ship',    name:'เรือ (Ship)',          value:10, cls:'c-ship',    dot:'dot-ship'},
+  {id:'rice',    name:'ข้าว (Rice)',           value:20, cls:'c-rice',    dot:'dot-rice'},
+  {id:'spice',   name:'เครื่องเทศ (Spice)',    value:25, cls:'c-spice',   dot:'dot-spice'},
+  {id:'rubber',  name:'ยาง (Rubber)',          value:30, cls:'c-rubber',  dot:'dot-rubber'},
+  {id:'siapsaji',name:'Siap Saji',             value:35, cls:'c-siapsaji',dot:'dot-siapsaji'},
+  {id:'oil',     name:'น้ำมัน (Oil)',          value:40, cls:'c-oil',     dot:'dot-oil'},
+];
+
+let selA = 'rice', selB = 'rice';
+let nominal = 0, increment = 0, mergeType = 'normal'; // 'normal' | 'siapsaji' | 'invalid'
+
+// ── Render type radios ──────────────────────────────────
+function renderTypes(which) {
+  const sel = which === 'a' ? selA : selB;
+  document.getElementById('types-' + which).innerHTML = GOODS.map(g => `
+    <div class="good-type-row">
+      <label>
+        <input type="radio" name="type-${which}" value="${g.id}"
+          ${sel === g.id ? 'checked' : ''}
+          onchange="selectType('${which}','${g.id}')"/>
+        <span class="good-chip ${g.cls}">${g.name}</span>
+      </label>
+    </div>
+  `).join('');
+}
+
+function selectType(which, id) {
+  if (which === 'a') selA = id; else selB = id;
+  updateDot(which, id);
+  calc();
+}
+
+function updateDot(which, id) {
+  const g = GOODS.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('dot-' + which).className = 'dot ' + g.dot;
+  document.getElementById('title-' + which).textContent = `Company ${which.toUpperCase()} · ${g.name}`;
+}
+
+function step(which, delta) {
+  const el = document.getElementById('goods-' + which);
+  el.value = Math.max(1, (parseInt(el.value) || 1) + delta);
+  calc();
+}
+
+// ── Determine merger type ──────────────────────────────
+function getMergeType(a, b) {
+  if (a === b) return 'normal';
+  const pair = [a, b].sort().join('+');
+  if (pair === 'rice+spice') return 'siapsaji';
+  return 'invalid';
+}
+
+// ── Main calc ──────────────────────────────────────────
+function calc() {
+  const ga    = parseInt(document.getElementById('goods-a').value) || 0;
+  const gb    = parseInt(document.getElementById('goods-b').value) || 0;
+  const total = ga + gb;
+
+  mergeType = getMergeType(selA, selB);
+
+  const badge = document.getElementById('merge-badge');
+  const siapNote = document.getElementById('siap-note');
+  const resultCard = document.getElementById('result-card');
+
+  if (mergeType === 'invalid') {
+    badge.className = 'merge-badge invalid';
+    badge.textContent = '⚠️ ประเภทสินค้าไม่ตรงกัน — ไม่สามารถ merge ได้';
+    document.getElementById('res-nominal').textContent = '—';
+    document.getElementById('res-increment').textContent = '—';
+    document.getElementById('ladder').innerHTML = '';
+    document.getElementById('breakdown').innerHTML = '';
+    siapNote.style.display = 'none';
+    resetSplit();
+    return;
+  }
+
+  let valuePerGood;
+
+  if (mergeType === 'siapsaji') {
+    badge.className = 'merge-badge siapsaji';
+    badge.textContent = '🍱 Siap Saji Merger (ข้าว + เครื่องเทศ)';
+    valuePerGood = 25;
+    siapNote.style.display = 'block';
+    document.getElementById('give-back').textContent = Math.ceil(total / 2);
+  } else {
+    badge.className = 'merge-badge normal';
+    badge.textContent = 'Normal Merger · ' + (GOODS.find(g => g.id === selA)?.name || '');
+    valuePerGood = GOODS.find(g => g.id === selA)?.value || 0;
+    siapNote.style.display = 'none';
+  }
+
+  nominal   = total * valuePerGood;
+  increment = total; // จำนวนชิ้นรวม = ขั้น bid
+
+  document.getElementById('res-nominal').textContent   = nominal.toLocaleString();
+  document.getElementById('res-increment').textContent = increment.toLocaleString();
+
+  renderLadder(nominal);
+
+  // Breakdown
+  const pA = total > 0 ? (ga / total * 100).toFixed(1) : '0';
+  const pB = total > 0 ? (gb / total * 100).toFixed(1) : '0';
+  const nameA = GOODS.find(g => g.id === selA)?.name || '';
+  const nameB = GOODS.find(g => g.id === selB)?.name || '';
+
+  let brkLine = mergeType === 'siapsaji'
+    ? `<b>Nominal:</b> (${ga} ข้าว + ${gb} เครื่องเทศ) × 25 = <span>${nominal.toLocaleString()} รูเปียห์</span>`
+    : `<b>Nominal:</b> (${ga} + ${gb}) × ${valuePerGood} = <span>${nominal.toLocaleString()} รูเปียห์</span>`;
+
+  document.getElementById('breakdown').innerHTML = `
+    ${brkLine}<br>
+    <b>Increment:</b> รวม ${total} ชิ้น → เพิ่มครั้งละ <span>${increment} รูเปียห์</span>
+  `;
+
+  // Update split labels
+  document.getElementById('split-lbl-a').textContent = `เจ้าของ A (${nameA}, ${ga} ชิ้น)`;
+  document.getElementById('split-lbl-b').textContent = `เจ้าของ B (${nameB}, ${gb} ชิ้น)`;
+  document.getElementById('split-pct-a').textContent = pA + '%';
+  document.getElementById('split-pct-b').textContent = pB + '%';
+
+  calcSplit();
+}
+
+// ── Render ladder from a starting bid ─────────────────
+function renderLadder(startBid) {
+  const lbl = document.getElementById('ladder-lbl');
+  if (startBid === nominal) {
+    lbl.textContent = 'ขั้นบันไดการประมูล · 10 ขั้นแรก';
+  } else {
+    lbl.textContent = `ขั้นถัดไปจาก ${startBid.toLocaleString()} รูเปียห์`;
+  }
+  let html = '';
+  for (let i = 0; i <= 9; i++) {
+    const val = startBid + i * increment;
+    html += `<span class="bid-pill ${i===0?'first':'step'}">${val.toLocaleString()}</span>`;
+  }
+  document.getElementById('ladder').innerHTML = html;
+}
+
+// ── Split calc (called when bid input changes) ─────────
+function calcSplit() {
+  const ga    = parseInt(document.getElementById('goods-a').value) || 0;
+  const gb    = parseInt(document.getElementById('goods-b').value) || 0;
+  const total = ga + gb;
+  const bidEl = document.getElementById('bid-actual');
+  const errEl = document.getElementById('bid-error');
+  const bid   = parseInt(bidEl.value) || 0;
+
+  if (mergeType === 'invalid' || nominal === 0) { resetSplit(); return; }
+
+  if (!bidEl.value || bid === 0) {
+    bidEl.className = 'bid-actual';
+    errEl.className = 'bid-error';
+    document.getElementById('split-amt-a').textContent = '—';
+    document.getElementById('split-amt-b').textContent = '—';
+    renderLadder(nominal);
+    return;
+  }
+
+  // Validate: must be >= nominal and a valid step
+  const isValid = bid >= nominal && (bid - nominal) % increment === 0;
+
+  if (!isValid) {
+    bidEl.className = 'bid-actual invalid-bid';
+    const nearest = bid < nominal
+      ? nominal
+      : nominal + Math.round((bid - nominal) / increment) * increment;
+    errEl.className = 'bid-error show';
+    errEl.textContent = `ราคาไม่ถูกต้อง — ต้องเป็น ${nominal.toLocaleString()} หรือ +${increment} ทุกขั้น (ใกล้เคียง: ${nearest.toLocaleString()})`;
+    document.getElementById('split-amt-a').textContent = '—';
+    document.getElementById('split-amt-b').textContent = '—';
+    renderLadder(nominal);
+    return;
+  }
+
+  bidEl.className = 'bid-actual valid-bid';
+  errEl.className = 'bid-error';
+  renderLadder(bid);
+
+  const amtA = total > 0 ? Math.round(bid * ga / total) : 0;
+  const amtB = bid - amtA; // ส่วนที่เหลือให้ B เพื่อไม่ให้มีเศษ
+
+  document.getElementById('split-amt-a').textContent = amtA.toLocaleString();
+  document.getElementById('split-amt-b').textContent = amtB.toLocaleString();
+}
+
+function resetSplit() {
+  document.getElementById('split-amt-a').textContent = '—';
+  document.getElementById('split-amt-b').textContent = '—';
+  document.getElementById('split-pct-a').textContent = '— %';
+  document.getElementById('split-pct-b').textContent = '— %';
+}
+
+// ── Init ───────────────────────────────────────────────
+renderTypes('a');
+renderTypes('b');
+updateDot('a', 'rice');
+updateDot('b', 'rice');
+calc();
+</script>
+</body>
+</html>
