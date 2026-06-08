@@ -215,11 +215,6 @@
     .split-box.same  { /* same owner — dim */ opacity:.6; }
 
     /* ── Siap note ── */
-    .siap-note {
-      background:rgba(180,120,30,.1); border:1px solid rgba(180,120,30,.35);
-      border-radius:7px; padding:8px 12px; font-size:.78rem; color:#d4a060;
-      margin-top:12px; line-height:1.6; display:none;
-    }
 
     /* ── Breakdown text ── */
     .breakdown { margin-top:14px; font-size:.82rem; color:var(--text-dim); line-height:1.9; border-top:1px solid var(--border2); padding-top:12px; }
@@ -385,7 +380,6 @@
 
     <div class="breakdown" id="breakdown"></div>
 
-    <div class="siap-note" id="siap-note" style="display:none"></div>
   </div>
 
 </div>
@@ -456,7 +450,6 @@ function calc() {
   mergeType = getMergeType(selA, selB);
 
   const badge = document.getElementById('merge-badge');
-  const siapNote = document.getElementById('siap-note');
   const resultCard = document.getElementById('result-card');
 
   if (mergeType === 'invalid') {
@@ -466,7 +459,6 @@ function calc() {
     document.getElementById('res-increment').textContent = '—';
     document.getElementById('ladder').innerHTML = '';
     document.getElementById('breakdown').innerHTML = '';
-    siapNote.style.display = 'none';
     resetSplit();
     return;
   }
@@ -476,7 +468,6 @@ function calc() {
   if (mergeType === 'siapsaji') {
     badge.className = 'merge-badge siapsaji';
     badge.textContent = '🍱 Siap Saji Merger (ข้าว + เครื่องเทศ)';
-    siapNote.style.display = 'none';
     // คำนวณแยกตามชนิด: ข้าว×20 + เครื่องเทศ×25
     const riceCount  = selA === 'rice' ? ga : gb;
     const spiceCount = selA === 'spice' ? ga : gb;
@@ -485,7 +476,6 @@ function calc() {
     badge.className = 'merge-badge normal';
     badge.textContent = 'Normal Merger · ' + (GOODS.find(g => g.id === selA)?.name || '');
     valuePerGood = GOODS.find(g => g.id === selA)?.value || 0;
-    siapNote.style.display = 'none';
     nominal = total * valuePerGood;
   }
 
