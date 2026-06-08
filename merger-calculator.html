@@ -216,7 +216,69 @@
     .split-box.b-box { border-color:rgba(200,168,75,.3); }
     .split-box.same  { /* same owner — dim */ opacity:.6; }
 
-    /* ── Siap note ── */
+    /* ── Bid Picker ── */
+    #bid-picker-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.65); z-index: 999;
+      align-items: flex-end; justify-content: center;
+    }
+    #bid-picker-overlay.show { display: flex; }
+
+    #bid-picker {
+      background: #2a3418; border: 1px solid var(--gold-dim);
+      border-radius: 16px 16px 0 0; width: 100%; max-width: 480px;
+      animation: slideUp .22s ease;
+    }
+    @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+
+    .picker-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border2);
+    }
+    .picker-title { font-family:'Cinzel',serif; font-size:.75rem; color:var(--gold); letter-spacing:.12em; text-transform:uppercase; }
+    .picker-btn { font-family:'Cinzel',serif; font-size:.72rem; padding:6px 14px; border-radius:6px; border:1px solid; cursor:pointer; letter-spacing:.06em; background:transparent; }
+    .picker-btn.cancel  { border-color:var(--border2); color:var(--text-dim); }
+    .picker-btn.confirm { border-color:var(--gold); color:var(--gold-lt); background:rgba(200,168,75,.1); }
+    .picker-btn:hover { opacity:.8; }
+
+    .picker-body {
+      position: relative; height: 260px; overflow: hidden;
+    }
+    /* Gradient masks */
+    .picker-body::before, .picker-body::after {
+      content: ''; position: absolute; left:0; right:0; z-index: 2; pointer-events: none;
+    }
+    .picker-body::before { top:0; height:104px; background:linear-gradient(to bottom, #2a3418 0%, rgba(42,52,24,0) 100%); }
+    .picker-body::after  { bottom:0; height:104px; background:linear-gradient(to top,   #2a3418 0%, rgba(42,52,24,0) 100%); }
+
+    /* Center highlight bar */
+    .picker-center-bar {
+      position: absolute; left:0; right:0; top:50%;
+      transform: translateY(-50%);
+      height: 52px; z-index: 1; pointer-events: none;
+      border-top: 1px solid var(--gold-dim);
+      border-bottom: 1px solid var(--gold-dim);
+      background: rgba(200,168,75,.07);
+    }
+
+    /* Scrollable drum */
+    .picker-drum {
+      height: 260px; overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .picker-drum::-webkit-scrollbar { display: none; }
+
+    .picker-item {
+      height: 52px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 1rem; color: var(--text-dim);
+      scroll-snap-align: center; transition: color .15s, font-size .15s;
+      cursor: pointer;
+    }
+    .picker-item:first-child { margin-top: 104px; }
+    .picker-item:last-child  { margin-bottom: 104px; }
+    .picker-item.active { color: var(--gold-lt); font-size: 1.25rem; font-weight: 700; }
 
     /* ── Breakdown text ── */
     .breakdown { margin-top:14px; font-size:.82rem; color:var(--text-dim); line-height:1.9; border-top:1px solid var(--border2); padding-top:12px; }
@@ -358,7 +420,7 @@
       <div class="bid-section-title">✦ ราคาที่ประมูลได้จริง</div>
       <div class="bid-input-row">
         <label>ราคาที่ชนะ</label>
-        <input class="bid-actual" id="bid-actual" type="number" min="0" placeholder="0" oninput="calcSplit()"/>
+        <input class="bid-actual" id="bid-actual" type="number" min="0" placeholder="กดเพื่อเลือก" readonly onclick="openPicker()" style="cursor:pointer"/>
         <label>รูเปียห์</label>
       </div>
       <div class="bid-error" id="bid-error"></div>
@@ -386,6 +448,21 @@
 
 </div>
 
+<!-- ═══ BID PICKER MODAL ═══ -->
+<div id="bid-picker-overlay" onclick="closePicker()">
+  <div id="bid-picker" onclick="event.stopPropagation()">
+    <div class="picker-header">
+      <button class="picker-btn cancel" onclick="closePicker()">ยกเลิก</button>
+      <span class="picker-title" id="picker-title">เลือกราคา Bid</span>
+      <button class="picker-btn confirm" onclick="confirmPicker()">ยืนยัน</button>
+    </div>
+    <div class="picker-body">
+      <div class="picker-center-bar"></div>
+      <div class="picker-drum" id="picker-drum"></div>
+    </div>
+  </div>
+</div>
+
 <footer>Indonesia Board Game · Third Edition · Phase 3 Merger Calculator</footer>
 
 <script>
@@ -394,7 +471,7 @@ const GOODS = [
   {id:'rice',    name:'ข้าว (Rice)',           value:20, cls:'c-rice',    dot:'dot-rice'},
   {id:'spice',   name:'เครื่องเทศ (Spice)',    value:25, cls:'c-spice',   dot:'dot-spice'},
   {id:'rubber',  name:'ยาง (Rubber)',          value:30, cls:'c-rubber',  dot:'dot-rubber'},
-  {id:'siapsaji',name:'Siap Saji',             value:35, cls:'c-siapsaji',dot:'dot-siapsaji'},
+  {id:'siapsaji',name:'ข้าวกล่อง (Siap Saji)',  value:35, cls:'c-siapsaji',dot:'dot-siapsaji'},
   {id:'oil',     name:'น้ำมัน (Oil)',          value:40, cls:'c-oil',     dot:'dot-oil'},
 ];
 
@@ -469,7 +546,7 @@ function calc() {
 
   if (mergeType === 'siapsaji') {
     badge.className = 'merge-badge siapsaji';
-    badge.textContent = '🍱 Siap Saji Merger (ข้าว + เครื่องเทศ)';
+    badge.textContent = '🍱 ข้าวกล่อง (Siap Saji) Merger · ข้าว + เครื่องเทศ';
     // คำนวณแยกตามชนิด: ข้าว×20 + เครื่องเทศ×25
     const riceCount  = selA === 'rice' ? ga : gb;
     const spiceCount = selA === 'spice' ? ga : gb;
@@ -609,6 +686,61 @@ function resetSplit() {
   document.getElementById('split-amt-b').textContent = '—';
   document.getElementById('split-pct-a').textContent = '— %';
   document.getElementById('split-pct-b').textContent = '— %';
+}
+
+// ── Bid Picker ────────────────────────────────────────
+const ITEM_H = 52;
+let pickerValues = [];
+
+function openPicker() {
+  if (nominal === 0 || mergeType === 'invalid') return;
+
+  // สร้าง list ค่า bid ที่ valid (100 ขั้น)
+  pickerValues = [];
+  for (let i = 0; i < 100; i++) pickerValues.push(nominal + i * increment);
+
+  // render items
+  const drum = document.getElementById('picker-drum');
+  drum.innerHTML = pickerValues.map((v, i) =>
+    `<div class="picker-item" data-idx="${i}">${v.toLocaleString()}</div>`
+  ).join('');
+
+  // อัป title
+  document.getElementById('picker-title').textContent =
+    `ราคา Bid (Nominal: ${nominal.toLocaleString()}, +${increment}/ขั้น)`;
+
+  // scroll ไปที่ค่าปัจจุบัน
+  const curBid = parseInt(document.getElementById('bid-actual').value) || nominal;
+  const curIdx = Math.max(0, pickerValues.indexOf(curBid));
+  document.getElementById('bid-picker-overlay').classList.add('show');
+
+  requestAnimationFrame(() => {
+    drum.scrollTop = curIdx * ITEM_H;
+    updateActiveItem(drum);
+  });
+
+  // scroll listener
+  drum.onscroll = () => updateActiveItem(drum);
+}
+
+function updateActiveItem(drum) {
+  const centerIdx = Math.round(drum.scrollTop / ITEM_H);
+  drum.querySelectorAll('.picker-item').forEach((el, i) => {
+    el.classList.toggle('active', i === centerIdx);
+  });
+}
+
+function closePicker() {
+  document.getElementById('bid-picker-overlay').classList.remove('show');
+}
+
+function confirmPicker() {
+  const drum = document.getElementById('picker-drum');
+  const idx = Math.round(drum.scrollTop / ITEM_H);
+  const val = pickerValues[Math.max(0, Math.min(pickerValues.length - 1, idx))];
+  document.getElementById('bid-actual').value = val;
+  closePicker();
+  calcSplit();
 }
 
 // ── Init ───────────────────────────────────────────────
