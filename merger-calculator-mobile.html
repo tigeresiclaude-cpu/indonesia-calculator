@@ -2,170 +2,124 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"/>
   <title>Indonesia – Merger Calculator</title>
   <meta name="description" content="เครื่องคำนวณราคาประมูลควบรวมบริษัท (Phase 3 Merger) สำหรับบอร์ดเกม Indonesia ฉบับที่ 3"/>
-  <meta name="theme-color" content="#1e2810"/>
+  <meta name="theme-color" content="#232e10"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Merger"/>
+  <link rel="manifest" href="manifest.webmanifest"/>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="assets/favicon.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pinyon+Script&family=Sarabun:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/css/base.css"/>
   <link rel="stylesheet" href="assets/css/mobile.css"/>
 </head>
 <body>
-<div class="page">
 
-  <!-- HERO -->
-  <header class="hero">
-    <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Indonesia Third Edition">
-      <defs>
-        <!-- ใบไม้ชี้ขึ้น (ขอบบน) -->
-        <pattern id="ht" patternUnits="userSpaceOnUse" width="24" height="28">
-          <path d="M12,28 C5,17 3,7 12,0 C21,7 19,17 12,28Z" fill="#b8a830"/>
-          <path d="M4,28 C-1,19-1,10 5,3 C8,10 8,19 4,28Z" fill="#a09020" opacity=".85"/>
-          <path d="M20,28 C25,19 25,10 19,3 C16,10 16,19 20,28Z" fill="#a09020" opacity=".85"/>
-        </pattern>
-        <!-- ชี้ลง (ขอบล่าง) -->
-        <pattern id="hb" patternUnits="userSpaceOnUse" width="24" height="28">
-          <path d="M12,0 C5,11 3,21 12,28 C21,21 19,11 12,0Z" fill="#b8a830"/>
-          <path d="M4,0 C-1,9-1,18 5,25 C8,18 8,9 4,0Z" fill="#a09020" opacity=".85"/>
-          <path d="M20,0 C25,9 25,18 19,25 C16,18 16,9 20,0Z" fill="#a09020" opacity=".85"/>
-        </pattern>
-        <!-- ชี้ซ้าย -->
-        <pattern id="hl" patternUnits="userSpaceOnUse" width="28" height="24">
-          <path d="M28,12 C17,5 7,3 0,12 C7,21 17,19 28,12Z" fill="#b8a830"/>
-          <path d="M28,4 C19,-1 10,-1 3,5 C10,8 19,8 28,4Z" fill="#a09020" opacity=".85"/>
-          <path d="M28,20 C19,25 10,25 3,19 C10,16 19,16 28,20Z" fill="#a09020" opacity=".85"/>
-        </pattern>
-        <!-- ชี้ขวา -->
-        <pattern id="hr" patternUnits="userSpaceOnUse" width="28" height="24">
-          <path d="M0,12 C11,5 21,3 28,12 C21,21 11,19 0,12Z" fill="#b8a830"/>
-          <path d="M0,4 C9,-1 18,-1 25,5 C18,8 9,8 0,4Z" fill="#a09020" opacity=".85"/>
-          <path d="M0,20 C9,25 18,25 25,19 C18,16 9,16 0,20Z" fill="#a09020" opacity=".85"/>
-        </pattern>
-      </defs>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+</svg>
 
-      <rect width="680" height="210" fill="#1e2810"/>
+<div class="app">
 
-      <!-- แถบขอบลายใบไม้ -->
-      <rect x="0"   y="0"   width="680" height="28"  fill="url(#ht)"/>
-      <rect x="0"   y="182" width="680" height="28"  fill="url(#hb)"/>
-      <rect x="0"   y="28"  width="28"  height="154" fill="url(#hl)"/>
-      <rect x="652" y="28"  width="28"  height="154" fill="url(#hr)"/>
-
-      <!-- เส้นกรอบ -->
-      <rect x="28" y="28" width="624" height="154" fill="none" stroke="#806e18" stroke-width="1.8"/>
-      <rect x="32" y="32" width="616" height="146" fill="none" stroke="#806e18" stroke-width="0.7"/>
-
-      <!-- เหรียญมุม -->
-      <circle cx="28"  cy="28"  r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <circle cx="652" cy="28"  r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <circle cx="28"  cy="182" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <circle cx="652" cy="182" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <g fill="#b8a830">
-        <path d="M28,18 C22,22 18,26 18,28 C22,28 26,24 28,18Z"/>
-        <path d="M28,18 C34,22 38,26 38,28 C34,28 30,24 28,18Z"/>
-        <path d="M652,18 C646,22 642,26 642,28 C646,28 650,24 652,18Z"/>
-        <path d="M652,18 C658,22 662,26 662,28 C658,28 654,24 652,18Z"/>
-        <path d="M28,192 C22,188 18,184 18,182 C22,182 26,186 28,192Z"/>
-        <path d="M28,192 C34,188 38,184 38,182 C34,182 30,186 28,192Z"/>
-        <path d="M652,192 C646,188 642,184 642,182 C646,182 650,186 652,192Z"/>
-        <path d="M652,192 C658,188 662,184 662,182 C658,182 654,186 652,192Z"/>
-      </g>
-
-      <text x="340" y="140" text-anchor="middle" font-family="'Pinyon Script',cursive" font-size="118" fill="#c8b030">Indonesia</text>
-
-      <line x1="235" y1="156" x2="295" y2="156" stroke="#706018" stroke-width="0.9"/>
-      <polygon points="340,151 344,156 340,161 336,156" fill="none" stroke="#706018" stroke-width="0.9"/>
-      <line x1="385" y1="156" x2="445" y2="156" stroke="#706018" stroke-width="0.9"/>
-
-      <text x="340" y="173" text-anchor="middle" font-family="Cinzel,serif" font-size="11.5" letter-spacing="8" fill="#8a7820">THIRD EDITION</text>
-    </svg>
-    <div class="hero-sub">Phase 3 · Merger Bid Calculator</div>
+  <header class="topbar">
+    <span class="tb-mark">◆</span>
+    <span class="tb-title">Indonesia</span>
+    <span class="tb-sub">Merger · Phase 3</span>
   </header>
 
-  <main class="body">
+  <main class="content">
 
     <div class="badge normal" id="badge" role="status">Normal Merger</div>
 
     <!-- บริษัท A / B -->
-    <div class="companies-row">
-      <section class="co-block">
-        <div class="co-header">
-          <h2 class="co-label"><span class="co-dot" id="dot-a"></span>บริษัท A</h2>
-        </div>
-        <div class="type-grid" id="types-a"></div>
-        <div class="count-row">
-          <button class="cnt-btn" type="button" data-step="a" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท A">−</button>
-          <input class="cnt-input" id="goods-a" type="number" min="1" max="30" value="3" aria-label="จำนวนสินค้าบริษัท A"/>
-          <button class="cnt-btn" type="button" data-step="a" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท A">+</button>
-          <span class="count-lbl">ชิ้น</span>
-        </div>
-      </section>
-
-      <section class="co-block">
-        <div class="co-header">
-          <h2 class="co-label"><span class="co-dot" id="dot-b"></span>บริษัท B</h2>
-        </div>
-        <div class="type-grid" id="types-b"></div>
-        <div class="count-row">
-          <button class="cnt-btn" type="button" data-step="b" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท B">−</button>
-          <input class="cnt-input" id="goods-b" type="number" min="1" max="30" value="5" aria-label="จำนวนสินค้าบริษัท B"/>
-          <button class="cnt-btn" type="button" data-step="b" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท B">+</button>
-          <span class="count-lbl">ชิ้น</span>
-        </div>
-      </section>
-    </div>
-
-    <!-- ส่วนเงิน -->
-    <div class="money-section">
-
-      <div class="results-row">
-        <div class="res-box accent">
-          <div class="res-lbl">Nominal (ขั้นต่ำ)</div>
-          <div class="res-val" id="res-nominal">—</div>
-          <div class="res-unit">รูเปียห์</div>
-        </div>
-        <div class="res-box">
-          <div class="res-lbl">Increment (+/ขั้น)</div>
-          <div class="res-val" id="res-increment">—</div>
-          <div class="res-unit">รูเปียห์</div>
-        </div>
-      </div>
-
-      <div class="ladder-wrap">
-        <div class="ladder-lbl" id="ladder-lbl">ขั้นบันไดการประมูล (กดเพื่อเลือก)</div>
-        <div class="ladder" id="ladder"></div>
-      </div>
-
-      <div class="bid-split-row">
-        <button class="bid-tap" type="button" id="bid-tap">
-          <span class="bt-lbl">ราคาประมูล</span>
-          <span class="bt-val" id="bid-display">—</span>
-          <span class="bt-hint">กดเพื่อเลือก</span>
+    <div class="co-row">
+      <section class="card co">
+        <div class="co-tag">บริษัท A</div>
+        <button class="good-btn" type="button" data-good="a" aria-label="เลือกประเภทสินค้าบริษัท A">
+          <i class="swatch" id="dot-a"></i>
+          <span class="good-name" id="good-a">ข้าว</span>
+          <span class="good-val" id="val-a">20</span>
+          <svg class="chev"><use href="#i-chev"/></svg>
         </button>
-        <div class="split-box">
-          <div class="sp-lbl" id="sp-lbl-a">ส่วนแบ่งบริษัท A</div>
-          <div class="sp-pct" id="sp-pct-a">— %</div>
-          <div class="sp-amt" id="sp-amt-a">—</div>
-          <div class="sp-unit">รูเปียห์</div>
+        <div class="stepper">
+          <button class="st" type="button" data-step="a" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท A">−</button>
+          <input class="cnt" id="goods-a" type="number" inputmode="numeric" min="1" max="30" value="3" aria-label="จำนวนสินค้าบริษัท A"/>
+          <button class="st" type="button" data-step="a" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท A">+</button>
         </div>
-        <div class="split-box">
-          <div class="sp-lbl" id="sp-lbl-b">ส่วนแบ่งบริษัท B</div>
-          <div class="sp-pct" id="sp-pct-b">— %</div>
-          <div class="sp-amt" id="sp-amt-b">—</div>
-          <div class="sp-unit">รูเปียห์</div>
+      </section>
+
+      <section class="card co">
+        <div class="co-tag">บริษัท B</div>
+        <button class="good-btn" type="button" data-good="b" aria-label="เลือกประเภทสินค้าบริษัท B">
+          <i class="swatch" id="dot-b"></i>
+          <span class="good-name" id="good-b">ข้าว</span>
+          <span class="good-val" id="val-b">20</span>
+          <svg class="chev"><use href="#i-chev"/></svg>
+        </button>
+        <div class="stepper">
+          <button class="st" type="button" data-step="b" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท B">−</button>
+          <input class="cnt" id="goods-b" type="number" inputmode="numeric" min="1" max="30" value="5" aria-label="จำนวนสินค้าบริษัท B"/>
+          <button class="st" type="button" data-step="b" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท B">+</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ตัวเลขหลัก -->
+    <section class="card hero-num">
+      <div class="hn-lbl">Nominal · ราคาเปิดขั้นต่ำ</div>
+      <div class="hn-row">
+        <div class="hn-val num" id="res-nominal">—</div>
+        <div class="hn-inc num">+<span id="res-increment">—</span><small>/ขั้น</small></div>
+      </div>
+      <div class="hn-formula" id="formula"></div>
+    </section>
+
+    <!-- ขั้นบันไดราคา -->
+    <section class="ladder-wrap">
+      <div class="sec-lbl" id="ladder-lbl">ขั้นบันไดการประมูล · แตะเพื่อเลือก</div>
+      <div class="ladder" id="ladder"></div>
+    </section>
+
+    <!-- ราคาที่ชนะ + ส่วนแบ่ง -->
+    <section class="card payout" id="payout">
+      <button class="bid-row" type="button" id="bid-tap">
+        <span class="br-lbl">ราคาที่ชนะ</span>
+        <span class="br-val num" id="bid-display">—</span>
+        <svg class="chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="split-row">
+        <div class="sp">
+          <div class="sp-lbl">A · <span id="sp-pct-a">—%</span></div>
+          <div class="sp-amt num" id="sp-amt-a">—</div>
+          <div class="sp-who" id="sp-who-a">—</div>
+        </div>
+        <div class="sp">
+          <div class="sp-lbl">B · <span id="sp-pct-b">—%</span></div>
+          <div class="sp-amt num" id="sp-amt-b">—</div>
+          <div class="sp-who" id="sp-who-b">—</div>
         </div>
       </div>
+    </section>
 
-      <div class="formula" id="formula"></div>
-
-    </div>
   </main>
 </div>
 
-<!-- ═══ PICKER ═══ -->
+<!-- เลือกประเภทสินค้า -->
+<div class="sheet-overlay" id="sheet-overlay" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title" id="sheet-title">เลือกประเภทสินค้า</div>
+    <div class="sheet-list" id="sheet-list"></div>
+  </div>
+</div>
+
+<!-- เลือกราคา bid -->
 <div class="picker-overlay" id="picker-overlay" role="dialog" aria-modal="true" aria-labelledby="picker-title">
   <div class="picker-modal">
     <div class="picker-header">
@@ -182,6 +136,7 @@
 
 <script src="assets/js/merger-core.js"></script>
 <script src="assets/js/picker.js"></script>
+<script src="assets/js/sheet.js"></script>
 <script src="assets/js/app-mobile.js"></script>
 </body>
 </html>

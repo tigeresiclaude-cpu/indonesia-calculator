@@ -1,0 +1,14 @@
+{
+  "name": "Indonesia – Merger Calculator",
+  "short_name": "Merger",
+  "description": "เครื่องคำนวณราคาประมูลควบรวมบริษัท (Phase 3) สำหรับบอร์ดเกม Indonesia ฉบับที่ 3",
+  "start_url": "merger-calculator-mobile.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#232e10",
+  "theme_color": "#232e10",
+  "icons": [
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

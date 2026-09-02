@@ -6,29 +6,38 @@
   var fmt = C.formatMoney;
 
   var el = {};
-  ['badge', 'types-a', 'types-b', 'dot-a', 'dot-b', 'goods-a', 'goods-b',
-   'res-nominal', 'res-increment', 'ladder', 'ladder-lbl',
-   'bid-tap', 'bid-display', 'formula',
-   'sp-lbl-a', 'sp-lbl-b', 'sp-pct-a', 'sp-pct-b', 'sp-amt-a', 'sp-amt-b'
+  ['badge', 'dot-a', 'dot-b', 'good-a', 'good-b', 'val-a', 'val-b',
+   'goods-a', 'goods-b', 'res-nominal', 'res-increment', 'formula',
+   'ladder', 'ladder-lbl', 'payout', 'bid-tap', 'bid-display',
+   'sp-pct-a', 'sp-pct-b', 'sp-amt-a', 'sp-amt-b', 'sp-who-a', 'sp-who-b'
   ].forEach(function (id) { el[id] = document.getElementById(id); });
 
   var selected = { a: 'rice', b: 'rice' };
   var state = null;
   var currentBid = 0;
 
-  /* ชิปเลือกประเภทสินค้า */
-  function renderTypes(which) {
-    el['types-' + which].innerHTML = C.GOODS.map(function (g) {
-      var on = selected[which] === g.id;
-      return '<label class="type-chip ' + g.cls + (on ? ' selected' : '') + '">' +
-        '<input type="radio" name="type-' + which + '" value="' + g.id + '"' +
-        (on ? ' checked' : '') + '/>' + g.name + '</label>';
-    }).join('');
+  /* ปุ่มเลือกประเภทสินค้า */
+  function renderGood(which) {
+    var g = C.getGood(selected[which]);
+    if (!g) return;
+    el['dot-' + which].className = 'swatch ' + g.dot;
+    el['good-' + which].textContent = g.name;
+    el['val-' + which].textContent = g.value;
   }
 
-  function updateDot(which) {
-    var g = C.getGood(selected[which]);
-    if (g) el['dot-' + which].className = 'co-dot ' + g.dot;
+  function openGoodSheet(which) {
+    Sheet.open({
+      title: 'สินค้าของบริษัท ' + which.toUpperCase(),
+      current: selected[which],
+      options: C.GOODS.map(function (g) {
+        return { value: g.id, label: g.name + ' · ' + g.nameEn, hint: g.value + '/ชิ้น', dot: g.dot };
+      }),
+      onSelect: function (id) {
+        selected[which] = id;
+        renderGood(which);
+        calc();
+      }
+    });
   }
 
   /* คำนวณ */
@@ -42,15 +51,22 @@
 
     if (!state.valid) {
       el.badge.className = 'badge invalid';
-      el.badge.textContent = '⚠️ ประเภทไม่ตรงกัน — ไม่สามารถ merge ได้';
+      el.badge.textContent = '⚠️ merge ไม่ได้ — ต้องเป็นสินค้าชนิดเดียวกัน หรือ ข้าว + เครื่องเทศ';
       el['res-nominal'].textContent = '—';
       el['res-increment'].textContent = '—';
+      el.formula.textContent = '';
       el.ladder.innerHTML = '';
       el['ladder-lbl'].textContent = 'ขั้นบันไดการประมูล';
-      el.formula.innerHTML = '';
+      el.payout.classList.add('off');
+      el['sp-who-a'].textContent = '—';
+      el['sp-who-b'].textContent = '—';
+      el['sp-pct-a'].textContent = '—%';
+      el['sp-pct-b'].textContent = '—%';
       setBid(0);
       return;
     }
+
+    el.payout.classList.remove('off');
 
     if (state.mergeType === 'siapsaji') {
       el.badge.className = 'badge siapsaji';
@@ -62,15 +78,13 @@
 
     el['res-nominal'].textContent = fmt(state.nominal);
     el['res-increment'].textContent = fmt(state.increment);
+    el.formula.innerHTML =
+      '(' + state.goodsA + ' + ' + state.goodsB + ' ชิ้น) × <b>' + state.unitValue + '</b> รูเปียห์';
 
-    el['sp-lbl-a'].textContent = 'ส่วนแบ่งบริษัท A (' + state.goodA.name + ' ' + state.goodsA + 'ชิ้น)';
-    el['sp-lbl-b'].textContent = 'ส่วนแบ่งบริษัท B (' + state.goodB.name + ' ' + state.goodsB + 'ชิ้น)';
     el['sp-pct-a'].textContent = state.pctA.toFixed(1) + '%';
     el['sp-pct-b'].textContent = state.pctB.toFixed(1) + '%';
-
-    el.formula.innerHTML =
-      '<b>Nominal:</b> (' + state.goodsA + '+' + state.goodsB + ') × ' + state.unitValue +
-      ' = <span>' + fmt(state.nominal) + '</span> &nbsp;·&nbsp; <b>+' + state.increment + '</b>/ขั้น';
+    el['sp-who-a'].textContent = state.goodA.name + ' ' + state.goodsA + ' ชิ้น';
+    el['sp-who-b'].textContent = state.goodB.name + ' ' + state.goodsB + ' ชิ้น';
 
     /* จำนวนชิ้น/ประเภทเปลี่ยน → ขั้นราคาเปลี่ยนตาม ราคาเดิมอาจไม่ตรงขั้นอีกต่อไป */
     setBid(C.isValidBid(currentBid, state) ? currentBid : 0);
@@ -79,13 +93,17 @@
   /* บันไดราคา */
   function renderLadder() {
     var ladder = C.buildLadder(state, currentBid);
-    el['ladder-lbl'].textContent = ladder.label;
+    el['ladder-lbl'].textContent = ladder.label.replace('(กดเพื่อเลือก)', '· แตะเพื่อเลือก');
     el.ladder.innerHTML = ladder.pills.map(function (p) {
-      return '<span class="bid-pill ' + p.state + '" data-bid="' + p.value + '">' + fmt(p.value) + '</span>';
+      return '<button class="bid-pill ' + p.state + '" type="button" data-bid="' + p.value + '">' +
+        fmt(p.value) + '</button>';
     }).join('');
+
+    var active = el.ladder.querySelector('.current') || el.ladder.querySelector('.first');
+    if (active) active.scrollIntoView({ inline: 'center', block: 'nearest' });
   }
 
-  /* ราคาประมูล + ส่วนแบ่ง */
+  /* ราคาที่ชนะ + ส่วนแบ่ง */
   function setBid(value) {
     currentBid = value || 0;
 
@@ -104,7 +122,7 @@
     if (state && state.valid) renderLadder();
   }
 
-  function openPicker() {
+  function openBidPicker() {
     if (!state || !state.valid || state.nominal === 0) return;
     Picker.open({
       values: C.pickerValues(state),
@@ -115,15 +133,8 @@
   }
 
   /* ผูก event — HTML ไม่มี onclick */
-  ['a', 'b'].forEach(function (which) {
-    el['types-' + which].addEventListener('change', function (e) {
-      if (e.target.name !== 'type-' + which) return;
-      selected[which] = e.target.value;
-      updateDot(which);
-      renderTypes(which);
-      calc();
-    });
-    el['goods-' + which].addEventListener('input', calc);
+  document.querySelectorAll('[data-good]').forEach(function (btn) {
+    btn.addEventListener('click', function () { openGoodSheet(btn.dataset.good); });
   });
 
   document.querySelectorAll('[data-step]').forEach(function (btn) {
@@ -134,15 +145,22 @@
     });
   });
 
+  ['a', 'b'].forEach(function (which) {
+    el['goods-' + which].addEventListener('input', calc);
+    el['goods-' + which].addEventListener('blur', function () {
+      el['goods-' + which].value = C.clampGoods(el['goods-' + which].value);
+      calc();
+    });
+  });
+
   el.ladder.addEventListener('click', function (e) {
     var pill = e.target.closest('.bid-pill');
     if (pill) setBid(Number(pill.dataset.bid));
   });
 
-  el['bid-tap'].addEventListener('click', openPicker);
+  el['bid-tap'].addEventListener('click', openBidPicker);
 
   /* เริ่มต้น */
-  renderTypes('a'); renderTypes('b');
-  updateDot('a'); updateDot('b');
+  renderGood('a'); renderGood('b');
   calc();
 })();
