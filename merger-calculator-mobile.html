@@ -4,344 +4,41 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Indonesia – Merger Calculator</title>
+  <meta name="description" content="เครื่องคำนวณราคาประมูลควบรวมบริษัท (Phase 3 Merger) สำหรับบอร์ดเกม Indonesia ฉบับที่ 3"/>
+  <meta name="theme-color" content="#1e2810"/>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pinyon+Script&family=Sarabun:wght@400;600&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg:      #232e10;
-      --card:    #2e3918;
-      --card2:   #283215;
-      --border:  #4a5520;
-      --gold:    #c8a84b;
-      --gold-lt: #e2c87a;
-      --gold-dim:#8a7230;
-      --olive:   #7a8c3a;
-      --text:    #e8dba0;
-      --text-dim:#8a9050;
-      --red:     #c0392b;
-    }
-    * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Sarabun', sans-serif;
-      overflow: hidden;
-    }
-
-    /* ══ LAYOUT ══ */
-    .page {
-      display: flex;
-      flex-direction: column;
-      height: 100dvh;
-      padding: 0;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: #1e2810;
-      border-bottom: 1px solid var(--gold-dim);
-      flex-shrink: 0;
-      line-height: 0;
-    }
-    .hero svg { display:block; width:100%; }
-    .hero-sub {
-      font-family: 'Cinzel', serif;
-      font-size: .6rem;
-      color: var(--olive);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 4px 0 5px;
-      line-height: 1;
-    }
-
-    /* ── BODY ── */
-    .body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding: 7px 10px;
-      overflow: hidden;
-      min-height: 0;
-    }
-
-    /* ── BADGE ── */
-    .badge {
-      text-align: center;
-      padding: 5px 10px;
-      border-radius: 7px;
-      font-family: 'Cinzel', serif;
-      font-size: .72rem;
-      letter-spacing: .05em;
-      border: 1px solid;
-      flex-shrink: 0;
-    }
-    .badge.normal   { background:rgba(200,168,75,.1); border-color:var(--gold-dim); color:var(--gold); }
-    .badge.siapsaji { background:rgba(210,120,40,.12); border-color:#a05020; color:#d4905a; }
-    .badge.invalid  { background:rgba(180,40,30,.12); border-color:#802020; color:#c05040; }
-
-    /* ── COMPANIES ROW (compact — ไม่ขยาย) ── */
-    .companies-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .co-block {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 7px;
-    }
-    .co-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-    }
-    .co-label {
-      font-family: 'Cinzel', serif;
-      font-size: .55rem;
-      color: var(--gold);
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      display: flex; align-items: center; gap: 4px;
-    }
-    .co-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-
-    /* Type chips grid */
-    .type-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      margin-bottom: 5px;
-    }
-    .type-chip {
-      display: flex; align-items: center; gap: 3px;
-      padding: 2px 5px; border-radius: 10px; border: 1px solid;
-      font-size: .65rem; font-weight: 600; cursor: pointer;
-      transition: opacity .15s;
-      white-space: nowrap; overflow: hidden;
-      line-height: 1.4;
-    }
-    .type-chip input[type=radio] { display:none; }
-    .type-chip.selected { opacity: 1; }
-    .type-chip:not(.selected) { opacity: .45; }
-
-    /* Count stepper */
-    .count-row {
-      display: flex; align-items: center; gap: 4px;
-    }
-    .count-lbl { font-size: .65rem; color: var(--text-dim); flex-shrink:0; }
-    .cnt-btn {
-      width: 24px; height: 24px; border-radius: 5px;
-      border: 1px solid var(--border); background: var(--card2);
-      color: var(--gold-lt); font-size: .95rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .cnt-input {
-      flex: 1; min-width: 0;
-      background: #171f08; border: 1px solid var(--gold-dim); border-radius: 5px;
-      color: var(--gold-lt); font-size: .95rem; font-weight: 700;
-      text-align: center; padding: 2px 0; outline: none;
-      font-family: 'Cinzel', serif;
-    }
-
-    /* ── MONEY SECTION (ส่วนเงิน — ขยายเต็มพื้นที่ที่เหลือ) ── */
-    .money-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-height: 0;
-    }
-
-    /* ── RESULTS ROW ── */
-    .results-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .res-box {
-      background: var(--card2);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 7px 11px;
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    .res-box.accent { border-color: rgba(200,168,75,.5); background: rgba(200,168,75,.08); }
-    .res-lbl { font-family:'Cinzel',serif; font-size:.55rem; color:var(--text-dim); letter-spacing:.07em; text-transform:uppercase; margin-bottom:2px; }
-    .res-val { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .res-unit { font-size:.6rem; color:var(--text-dim); margin-top:2px; }
-
-    /* ── LADDER ── */
-    .ladder-wrap { flex-shrink: 0; }
-    .ladder-lbl {
-      font-family:'Cinzel',serif; font-size:.55rem; color:var(--text-dim);
-      letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px;
-    }
-    .ladder {
-      display: flex; gap: 5px;
-      overflow-x: auto; padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-    .ladder::-webkit-scrollbar { display:none; }
-    .bid-pill {
-      padding: 6px 12px; border-radius: 16px; border: 1px solid;
-      font-family:'Cinzel',serif; font-size:.82rem; font-weight:700;
-      cursor: pointer; white-space: nowrap; flex-shrink: 0;
-      transition: transform .1s;
-    }
-    .bid-pill:active { transform: scale(.95); }
-    .bid-pill.first   { background:rgba(200,168,75,.2); border-color:var(--gold); color:var(--gold-lt); }
-    .bid-pill.current { background:rgba(200,168,75,.35); border-color:var(--gold-lt); color:var(--gold-lt); box-shadow:0 0 10px rgba(200,168,75,.35); }
-    .bid-pill.past    { background:rgba(255,255,255,.02); border-color:var(--border); color:#4a5530; text-decoration:line-through; }
-    .bid-pill.step    { background:rgba(255,255,255,.04); border-color:var(--border); color:var(--text-dim); }
-
-    /* ── BID + SPLIT ── */
-    .bid-split-row {
-      display: grid;
-      grid-template-columns: auto 1fr 1fr;
-      gap: 6px;
-      align-items: stretch;
-      flex: 1;
-      min-height: 0;
-    }
-    .bid-tap {
-      background: var(--card2); border: 1px solid var(--gold-dim); border-radius: 10px;
-      padding: 10px 12px; cursor: pointer; text-align: center;
-      display: flex; flex-direction: column; justify-content: center;
-      transition: background .15s; min-width: 82px;
-    }
-    .bid-tap:active { background: rgba(200,168,75,.15); }
-    .bid-tap .bt-lbl { font-family:'Cinzel',serif; font-size:.58rem; color:var(--gold-dim); letter-spacing:.07em; text-transform:uppercase; margin-bottom:5px; }
-    .bid-tap .bt-val { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .bid-tap .bt-hint { font-size:.62rem; color:var(--text-dim); margin-top:5px; }
-    .bid-tap.has-val .bt-val { color:#90d060; }
-
-    .split-box {
-      background: var(--card2); border: 1px solid rgba(200,168,75,.2);
-      border-radius: 10px; padding: 10px 10px;
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    .split-box .sp-lbl { font-family:'Cinzel',serif; font-size:.58rem; color:var(--text-dim); letter-spacing:.05em; text-transform:uppercase; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .split-box .sp-pct { font-size:.72rem; color:var(--text-dim); margin-bottom:4px; }
-    .split-box .sp-amt { font-family:'Cinzel',serif; font-size:2.2rem; font-weight:700; color:var(--gold-lt); line-height:1; }
-    .split-box .sp-unit { font-size:.62rem; color:var(--text-dim); margin-top:3px; }
-
-    /* ── FORMULA ── */
-    .formula {
-      font-size: .68rem; color: var(--text-dim); line-height: 1.5;
-      flex-shrink: 0;
-    }
-    .formula span { color: var(--text); }
-    .formula b { color: var(--gold); }
-
-    /* ═══ PICKER MODAL (CENTERED) ═══ */
-    #picker-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.72); z-index: 999;
-      align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    #picker-overlay.show { display: flex; }
-
-    #picker-modal {
-      background: #2a3418; border: 1px solid var(--gold-dim);
-      border-radius: 16px; width: 100%; max-width: 300px;
-      animation: popIn .2s ease;
-    }
-    @keyframes popIn {
-      from { transform: scale(.88); opacity:0; }
-      to   { transform: scale(1);   opacity:1; }
-    }
-
-    .pm-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 14px 10px;
-      border-bottom: 1px solid var(--border);
-    }
-    .pm-title { font-family:'Cinzel',serif; font-size:.7rem; color:var(--gold); letter-spacing:.1em; text-transform:uppercase; }
-    .pm-btn { font-family:'Cinzel',serif; font-size:.68rem; padding:5px 12px; border-radius:6px; border:1px solid; cursor:pointer; background:transparent; }
-    .pm-btn.cancel  { border-color:var(--border); color:var(--text-dim); }
-    .pm-btn.confirm { border-color:var(--gold); color:var(--gold-lt); background:rgba(200,168,75,.12); }
-
-    .pm-body {
-      position: relative; height: 240px; overflow: hidden;
-      border-radius: 0 0 16px 16px;
-    }
-    .pm-body::before, .pm-body::after {
-      content:''; position:absolute; left:0; right:0; z-index:2; pointer-events:none;
-    }
-    .pm-body::before { top:0; height:88px; background:linear-gradient(to bottom,#2a3418,rgba(42,52,24,0)); }
-    .pm-body::after  { bottom:0; height:88px; background:linear-gradient(to top,#2a3418,rgba(42,52,24,0)); }
-
-    .pm-center-bar {
-      position:absolute; left:0; right:0; top:50%; transform:translateY(-50%);
-      height:48px; z-index:1; pointer-events:none;
-      border-top:1px solid var(--gold-dim); border-bottom:1px solid var(--gold-dim);
-      background:rgba(200,168,75,.08);
-    }
-    .pm-drum {
-      height:240px; overflow-y:scroll;
-      scroll-snap-type:y mandatory;
-      -webkit-overflow-scrolling:touch;
-    }
-    .pm-drum::-webkit-scrollbar { display:none; }
-    .pm-item {
-      height:48px; display:flex; align-items:center; justify-content:center;
-      font-family:'Cinzel',serif; font-size:.95rem; color:var(--text-dim);
-      scroll-snap-align:center; cursor:pointer;
-    }
-    .pm-item:first-child { margin-top:96px; }
-    .pm-item:last-child  { margin-bottom:96px; }
-    .pm-item.active { color:var(--gold-lt); font-size:1.2rem; font-weight:700; }
-
-    /* Good chip colors */
-    .c-ship    {background:#152840;color:#7ec0e8;border-color:#1e5080;}
-    .c-rice    {background:#1e3010;color:#90c060;border-color:#2a5015;}
-    .c-spice   {background:#302010;color:#d4a030;border-color:#604010;}
-    .c-rubber  {background:#281028;color:#c080b8;border-color:#603060;}
-    .c-siapsaji{background:#301808;color:#e09050;border-color:#603010;}
-    .c-oil     {background:#181818;color:#909090;border-color:#404040;}
-    .dot-ship    {background:#2980b9;}
-    .dot-rice    {background:#3a8a30;}
-    .dot-spice   {background:#c09020;}
-    .dot-rubber  {background:#8040a0;}
-    .dot-siapsaji{background:#d06020;}
-    .dot-oil     {background:#707070;}
-  </style>
+  <link rel="stylesheet" href="assets/css/base.css"/>
+  <link rel="stylesheet" href="assets/css/mobile.css"/>
 </head>
 <body>
 <div class="page">
 
   <!-- HERO -->
-  <div class="hero">
-    <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg">
+  <header class="hero">
+    <svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Indonesia Third Edition">
       <defs>
-        <!-- TOP: 3-leaf cluster pointing outward (up) -->
+        <!-- ใบไม้ชี้ขึ้น (ขอบบน) -->
         <pattern id="ht" patternUnits="userSpaceOnUse" width="24" height="28">
           <path d="M12,28 C5,17 3,7 12,0 C21,7 19,17 12,28Z" fill="#b8a830"/>
           <path d="M4,28 C-1,19-1,10 5,3 C8,10 8,19 4,28Z" fill="#a09020" opacity=".85"/>
           <path d="M20,28 C25,19 25,10 19,3 C16,10 16,19 20,28Z" fill="#a09020" opacity=".85"/>
         </pattern>
-        <!-- BOTTOM: pointing down -->
+        <!-- ชี้ลง (ขอบล่าง) -->
         <pattern id="hb" patternUnits="userSpaceOnUse" width="24" height="28">
           <path d="M12,0 C5,11 3,21 12,28 C21,21 19,11 12,0Z" fill="#b8a830"/>
           <path d="M4,0 C-1,9-1,18 5,25 C8,18 8,9 4,0Z" fill="#a09020" opacity=".85"/>
           <path d="M20,0 C25,9 25,18 19,25 C16,18 16,9 20,0Z" fill="#a09020" opacity=".85"/>
         </pattern>
-        <!-- LEFT: pointing left -->
+        <!-- ชี้ซ้าย -->
         <pattern id="hl" patternUnits="userSpaceOnUse" width="28" height="24">
           <path d="M28,12 C17,5 7,3 0,12 C7,21 17,19 28,12Z" fill="#b8a830"/>
           <path d="M28,4 C19,-1 10,-1 3,5 C10,8 19,8 28,4Z" fill="#a09020" opacity=".85"/>
           <path d="M28,20 C19,25 10,25 3,19 C10,16 19,16 28,20Z" fill="#a09020" opacity=".85"/>
         </pattern>
-        <!-- RIGHT: pointing right -->
+        <!-- ชี้ขวา -->
         <pattern id="hr" patternUnits="userSpaceOnUse" width="28" height="24">
           <path d="M0,12 C11,5 21,3 28,12 C21,21 11,19 0,12Z" fill="#b8a830"/>
           <path d="M0,4 C9,-1 18,-1 25,5 C18,8 9,8 0,4Z" fill="#a09020" opacity=".85"/>
@@ -349,25 +46,23 @@
         </pattern>
       </defs>
 
-      <!-- BG -->
       <rect width="680" height="210" fill="#1e2810"/>
 
-      <!-- Border strips -->
-      <rect x="0"   y="0"   width="680" height="28" fill="url(#ht)"/>
-      <rect x="0"   y="182" width="680" height="28" fill="url(#hb)"/>
+      <!-- แถบขอบลายใบไม้ -->
+      <rect x="0"   y="0"   width="680" height="28"  fill="url(#ht)"/>
+      <rect x="0"   y="182" width="680" height="28"  fill="url(#hb)"/>
       <rect x="0"   y="28"  width="28"  height="154" fill="url(#hl)"/>
       <rect x="652" y="28"  width="28"  height="154" fill="url(#hr)"/>
 
-      <!-- Frame lines -->
+      <!-- เส้นกรอบ -->
       <rect x="28" y="28" width="624" height="154" fill="none" stroke="#806e18" stroke-width="1.8"/>
       <rect x="32" y="32" width="616" height="146" fill="none" stroke="#806e18" stroke-width="0.7"/>
 
-      <!-- Corner medallions -->
-      <circle cx="28" cy="28"  r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <circle cx="652" cy="28" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <circle cx="28" cy="182" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
+      <!-- เหรียญมุม -->
+      <circle cx="28"  cy="28"  r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
+      <circle cx="652" cy="28"  r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
+      <circle cx="28"  cy="182" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
       <circle cx="652" cy="182" r="9" fill="#1e2810" stroke="#806e18" stroke-width="1.8"/>
-      <!-- Corner leaf tufts -->
       <g fill="#b8a830">
         <path d="M28,18 C22,22 18,26 18,28 C22,28 26,24 28,18Z"/>
         <path d="M28,18 C34,22 38,26 38,28 C34,28 30,24 28,18Z"/>
@@ -379,69 +74,53 @@
         <path d="M652,192 C658,188 662,184 662,182 C658,182 654,186 652,192Z"/>
       </g>
 
-      <!-- "Indonesia" -->
-      <text x="340" y="140"
-        text-anchor="middle"
-        font-family="'Pinyon Script',cursive"
-        font-size="118"
-        fill="#c8b030">Indonesia</text>
+      <text x="340" y="140" text-anchor="middle" font-family="'Pinyon Script',cursive" font-size="118" fill="#c8b030">Indonesia</text>
 
-      <!-- Ornament divider -->
       <line x1="235" y1="156" x2="295" y2="156" stroke="#706018" stroke-width="0.9"/>
       <polygon points="340,151 344,156 340,161 336,156" fill="none" stroke="#706018" stroke-width="0.9"/>
       <line x1="385" y1="156" x2="445" y2="156" stroke="#706018" stroke-width="0.9"/>
 
-      <!-- THIRD EDITION -->
-      <text x="340" y="173"
-        text-anchor="middle"
-        font-family="Cinzel,serif"
-        font-size="11.5"
-        letter-spacing="8"
-        fill="#8a7820">THIRD EDITION</text>
+      <text x="340" y="173" text-anchor="middle" font-family="Cinzel,serif" font-size="11.5" letter-spacing="8" fill="#8a7820">THIRD EDITION</text>
     </svg>
     <div class="hero-sub">Phase 3 · Merger Bid Calculator</div>
-  </div>
+  </header>
 
-  <div class="body">
+  <main class="body">
 
-    <!-- BADGE -->
-    <div class="badge normal" id="badge">Normal Merger</div>
+    <div class="badge normal" id="badge" role="status">Normal Merger</div>
 
-    <!-- COMPANIES -->
+    <!-- บริษัท A / B -->
     <div class="companies-row">
-      <!-- Company A -->
-      <div class="co-block">
+      <section class="co-block">
         <div class="co-header">
-          <div class="co-label"><span class="co-dot" id="dot-a" style="background:#3a8a30"></span>บริษัท A</div>
+          <h2 class="co-label"><span class="co-dot" id="dot-a"></span>บริษัท A</h2>
         </div>
         <div class="type-grid" id="types-a"></div>
         <div class="count-row">
-          <button class="cnt-btn" onclick="step('a',-1)">−</button>
-          <input class="cnt-input" id="goods-a" type="number" min="1" max="30" value="3" oninput="calc()"/>
-          <button class="cnt-btn" onclick="step('a',1)">+</button>
+          <button class="cnt-btn" type="button" data-step="a" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท A">−</button>
+          <input class="cnt-input" id="goods-a" type="number" min="1" max="30" value="3" aria-label="จำนวนสินค้าบริษัท A"/>
+          <button class="cnt-btn" type="button" data-step="a" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท A">+</button>
           <span class="count-lbl">ชิ้น</span>
         </div>
-      </div>
+      </section>
 
-      <!-- Company B -->
-      <div class="co-block">
+      <section class="co-block">
         <div class="co-header">
-          <div class="co-label"><span class="co-dot" id="dot-b" style="background:#3a8a30"></span>บริษัท B</div>
+          <h2 class="co-label"><span class="co-dot" id="dot-b"></span>บริษัท B</h2>
         </div>
         <div class="type-grid" id="types-b"></div>
         <div class="count-row">
-          <button class="cnt-btn" onclick="step('b',-1)">−</button>
-          <input class="cnt-input" id="goods-b" type="number" min="1" max="30" value="5" oninput="calc()"/>
-          <button class="cnt-btn" onclick="step('b',1)">+</button>
+          <button class="cnt-btn" type="button" data-step="b" data-delta="-1" aria-label="ลดจำนวนสินค้าบริษัท B">−</button>
+          <input class="cnt-input" id="goods-b" type="number" min="1" max="30" value="5" aria-label="จำนวนสินค้าบริษัท B"/>
+          <button class="cnt-btn" type="button" data-step="b" data-delta="1" aria-label="เพิ่มจำนวนสินค้าบริษัท B">+</button>
           <span class="count-lbl">ชิ้น</span>
         </div>
-      </div>
+      </section>
     </div>
 
-    <!-- MONEY SECTION -->
+    <!-- ส่วนเงิน -->
     <div class="money-section">
 
-      <!-- RESULTS -->
       <div class="results-row">
         <div class="res-box accent">
           <div class="res-lbl">Nominal (ขั้นต่ำ)</div>
@@ -455,19 +134,17 @@
         </div>
       </div>
 
-      <!-- LADDER -->
       <div class="ladder-wrap">
         <div class="ladder-lbl" id="ladder-lbl">ขั้นบันไดการประมูล (กดเพื่อเลือก)</div>
         <div class="ladder" id="ladder"></div>
       </div>
 
-      <!-- BID + SPLIT -->
       <div class="bid-split-row">
-        <div class="bid-tap" id="bid-tap" onclick="openPicker()">
-          <div class="bt-lbl">ราคาประมูล</div>
-          <div class="bt-val" id="bid-display">—</div>
-          <div class="bt-hint">กดเพื่อเลือก</div>
-        </div>
+        <button class="bid-tap" type="button" id="bid-tap">
+          <span class="bt-lbl">ราคาประมูล</span>
+          <span class="bt-val" id="bid-display">—</span>
+          <span class="bt-hint">กดเพื่อเลือก</span>
+        </button>
         <div class="split-box">
           <div class="sp-lbl" id="sp-lbl-a">ส่วนแบ่งบริษัท A</div>
           <div class="sp-pct" id="sp-pct-a">— %</div>
@@ -482,242 +159,29 @@
         </div>
       </div>
 
-      <!-- FORMULA -->
       <div class="formula" id="formula"></div>
 
-    </div><!-- /money-section -->
+    </div>
+  </main>
+</div>
 
+<!-- ═══ PICKER ═══ -->
+<div class="picker-overlay" id="picker-overlay" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+  <div class="picker-modal">
+    <div class="picker-header">
+      <button class="picker-btn cancel" type="button" data-picker-cancel>ยกเลิก</button>
+      <span class="picker-title" id="picker-title">Bid</span>
+      <button class="picker-btn confirm" type="button" data-picker-confirm>ยืนยัน</button>
+    </div>
+    <div class="picker-body">
+      <div class="picker-center-bar"></div>
+      <div class="picker-drum" id="picker-drum"></div>
+    </div>
   </div>
 </div>
 
-<!-- ═══ PICKER MODAL (CENTERED) ═══ -->
-<div id="picker-overlay" onclick="closePicker()">
-  <div id="picker-modal" onclick="event.stopPropagation()">
-    <div class="pm-header">
-      <button class="pm-btn cancel" onclick="closePicker()">ยกเลิก</button>
-      <span class="pm-title" id="pm-title">Bid</span>
-      <button class="pm-btn confirm" onclick="confirmPicker()">ยืนยัน</button>
-    </div>
-    <div class="pm-body">
-      <div class="pm-center-bar"></div>
-      <div class="pm-drum" id="pm-drum"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-const GOODS = [
-  {id:'ship',    name:'เรือ',        value:10, cls:'c-ship',    dot:'dot-ship'},
-  {id:'rice',    name:'ข้าว',        value:20, cls:'c-rice',    dot:'dot-rice'},
-  {id:'spice',   name:'เครื่องเทศ', value:25, cls:'c-spice',   dot:'dot-spice'},
-  {id:'rubber',  name:'ยาง',         value:30, cls:'c-rubber',  dot:'dot-rubber'},
-  {id:'siapsaji',name:'ข้าวกล่อง',   value:35, cls:'c-siapsaji',dot:'dot-siapsaji'},
-  {id:'oil',     name:'น้ำมัน',      value:40, cls:'c-oil',     dot:'dot-oil'},
-];
-
-let selA='rice', selB='rice';
-let nominal=0, increment=0, mergeType='normal';
-let currentBid=0;
-const ITEM_H=48;
-
-// ── Type chips ────────────────────────────────────────
-function renderTypes(which) {
-  const sel = which==='a' ? selA : selB;
-  document.getElementById('types-'+which).innerHTML = GOODS.map(g=>`
-    <label class="type-chip ${g.cls} ${sel===g.id?'selected':''}">
-      <input type="radio" name="type-${which}" value="${g.id}"
-        ${sel===g.id?'checked':''}
-        onchange="selectType('${which}','${g.id}')"/>
-      ${g.name}
-    </label>
-  `).join('');
-}
-
-function selectType(which, id) {
-  if(which==='a') selA=id; else selB=id;
-  updateDot(which,id);
-  renderTypes(which);
-  calc();
-}
-
-function updateDot(which,id) {
-  const g=GOODS.find(x=>x.id===id);
-  if(!g) return;
-  document.getElementById('dot-'+which).className='co-dot '+g.dot;
-}
-
-function step(which,delta) {
-  const el=document.getElementById('goods-'+which);
-  el.value=Math.max(1,(parseInt(el.value)||1)+delta);
-  calc();
-}
-
-// ── Merge type ────────────────────────────────────────
-function getMergeType(a,b) {
-  if(a===b) return 'normal';
-  if([a,b].sort().join('+')==='rice+spice') return 'siapsaji';
-  return 'invalid';
-}
-
-// ── Calc ──────────────────────────────────────────────
-function calc() {
-  const ga=parseInt(document.getElementById('goods-a').value)||0;
-  const gb=parseInt(document.getElementById('goods-b').value)||0;
-  const total=ga+gb;
-  mergeType=getMergeType(selA,selB);
-
-  const badge=document.getElementById('badge');
-  if(mergeType==='invalid') {
-    badge.className='badge invalid';
-    badge.textContent='⚠️ ประเภทไม่ตรงกัน — ไม่สามารถ merge ได้';
-    document.getElementById('res-nominal').textContent='—';
-    document.getElementById('res-increment').textContent='—';
-    document.getElementById('ladder').innerHTML='';
-    document.getElementById('formula').innerHTML='';
-    return;
-  }
-
-  let valuePerGood;
-  if(mergeType==='siapsaji') {
-    badge.className='badge siapsaji';
-    badge.textContent='🍱 ข้าวกล่อง Merger · ข้าว + เครื่องเทศ';
-    nominal=total*25; valuePerGood=25;
-  } else {
-    const g=GOODS.find(x=>x.id===selA);
-    badge.className='badge normal';
-    badge.textContent='Normal Merger · '+(g?.name||'');
-    valuePerGood=g?.value||0;
-    nominal=total*valuePerGood;
-  }
-  increment=total;
-
-  document.getElementById('res-nominal').textContent=nominal.toLocaleString();
-  document.getElementById('res-increment').textContent=increment.toLocaleString();
-
-  const nameA=GOODS.find(g=>g.id===selA)?.name||'';
-  const nameB=GOODS.find(g=>g.id===selB)?.name||'';
-  const pA=total>0?(ga/total*100).toFixed(1):'0';
-  const pB=total>0?(gb/total*100).toFixed(1):'0';
-
-  document.getElementById('sp-lbl-a').textContent=`ส่วนแบ่งบริษัท A (${nameA} ${ga}ชิ้น)`;
-  document.getElementById('sp-lbl-b').textContent=`ส่วนแบ่งบริษัท B (${nameB} ${gb}ชิ้น)`;
-  document.getElementById('sp-pct-a').textContent=pA+'%';
-  document.getElementById('sp-pct-b').textContent=pB+'%';
-
-  const brkLine=mergeType==='siapsaji'
-    ?`<b>Nominal:</b> (${ga}+${gb}) × 25 = <span>${nominal.toLocaleString()}</span>`
-    :`<b>Nominal:</b> (${ga}+${gb}) × ${valuePerGood} = <span>${nominal.toLocaleString()}</span>`;
-  document.getElementById('formula').innerHTML=
-    `${brkLine} &nbsp;·&nbsp; <b>+${increment}</b>/ขั้น`;
-
-  // reset bid if nominal changed
-  if(currentBid < nominal) currentBid=0;
-  renderLadder(currentBid||nominal);
-  if(currentBid) calcSplit(currentBid);
-}
-
-// ── Ladder ────────────────────────────────────────────
-function renderLadder(startBid) {
-  const lbl=document.getElementById('ladder-lbl');
-  let displayStart, currentIdx;
-  if(startBid===nominal||!startBid) {
-    displayStart=nominal; currentIdx=-1;
-    lbl.textContent='ขั้นบันไดการประมูล (กดเพื่อเลือก)';
-  } else {
-    const maxBack=Math.floor((startBid-nominal)/increment);
-    const back=Math.min(2,maxBack);
-    displayStart=startBid-back*increment;
-    currentIdx=back;
-    lbl.textContent=`ขั้นถัดไปจาก ${startBid.toLocaleString()} ฿ (กดเพื่อเลือก)`;
-  }
-  let html='';
-  for(let i=0;i<10;i++){
-    const val=displayStart+i*increment;
-    let cls;
-    if(i===currentIdx) cls='current';
-    else if(i<currentIdx) cls='past';
-    else if(currentIdx===-1&&i===0) cls='first';
-    else cls='step';
-    html+=`<span class="bid-pill ${cls}" onclick="selectBid(${val})">${val.toLocaleString()}</span>`;
-  }
-  document.getElementById('ladder').innerHTML=html;
-}
-
-function selectBid(val) {
-  currentBid=val;
-  updateBidDisplay(val);
-  calcSplit(val);
-  renderLadder(val);
-}
-
-function updateBidDisplay(val) {
-  const tap=document.getElementById('bid-tap');
-  document.getElementById('bid-display').textContent=val?val.toLocaleString():'—';
-  tap.classList.toggle('has-val', !!val);
-}
-
-function calcSplit(bid) {
-  if(!bid||mergeType==='invalid'||nominal===0) {
-    document.getElementById('sp-amt-a').textContent='—';
-    document.getElementById('sp-amt-b').textContent='—';
-    return;
-  }
-  const ga=parseInt(document.getElementById('goods-a').value)||0;
-  const gb=parseInt(document.getElementById('goods-b').value)||0;
-  const total=ga+gb;
-  const amtA=total>0?Math.round(bid*ga/total):0;
-  const amtB=bid-amtA;
-  document.getElementById('sp-amt-a').textContent=amtA.toLocaleString();
-  document.getElementById('sp-amt-b').textContent=amtB.toLocaleString();
-}
-
-// ── Picker ────────────────────────────────────────────
-let pickerValues=[];
-
-function openPicker() {
-  if(nominal===0||mergeType==='invalid') return;
-  pickerValues=[];
-  for(let i=0;i<100;i++) pickerValues.push(nominal+i*increment);
-
-  document.getElementById('pm-title').textContent=
-    `Nominal ${nominal.toLocaleString()} · +${increment}/ขั้น`;
-
-  const drum=document.getElementById('pm-drum');
-  drum.innerHTML=pickerValues.map((v,i)=>
-    `<div class="pm-item" data-idx="${i}">${v.toLocaleString()}</div>`
-  ).join('');
-
-  document.getElementById('picker-overlay').classList.add('show');
-  const startIdx=currentBid?Math.max(0,pickerValues.indexOf(currentBid)):0;
-  requestAnimationFrame(()=>{
-    drum.scrollTop=startIdx*ITEM_H;
-    updateActive(drum);
-  });
-  drum.onscroll=()=>updateActive(drum);
-}
-
-function updateActive(drum) {
-  const idx=Math.round(drum.scrollTop/ITEM_H);
-  drum.querySelectorAll('.pm-item').forEach((el,i)=>
-    el.classList.toggle('active',i===idx));
-}
-
-function closePicker() {
-  document.getElementById('picker-overlay').classList.remove('show');
-}
-
-function confirmPicker() {
-  const drum=document.getElementById('pm-drum');
-  const idx=Math.round(drum.scrollTop/ITEM_H);
-  const val=pickerValues[Math.max(0,Math.min(pickerValues.length-1,idx))];
-  selectBid(val);
-  closePicker();
-}
-
-// ── Init ──────────────────────────────────────────────
-renderTypes('a'); renderTypes('b');
-updateDot('a','rice'); updateDot('b','rice');
-calc();
-</script>
+<script src="assets/js/merger-core.js"></script>
+<script src="assets/js/picker.js"></script>
+<script src="assets/js/app-mobile.js"></script>
 </body>
 </html>

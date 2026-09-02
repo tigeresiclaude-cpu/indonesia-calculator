@@ -1,0 +1,139 @@
+/* หน้า mobile (ทับ base.css) — จัดให้พอดี 1 หน้าจอ ไม่ต้องเลื่อน */
+
+:root {
+  /* picker บน mobile เป็นกล่องกลางจอ ขนาดกะทัดรัด */
+  --picker-item-h: 48px;
+  --picker-body-h: 240px;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html, body { height: 100%; overflow: hidden; font-family: 'Sarabun', sans-serif; }
+
+/* LAYOUT */
+.page { display:flex; flex-direction:column; height:100dvh; }
+
+/* HERO */
+.hero { background:#1e2810; border-bottom:1px solid var(--gold-dim); flex-shrink:0; line-height:0; }
+.hero svg { display:block; width:100%; }
+.hero-sub {
+  font-family:'Cinzel',serif; font-size:.6rem; color:var(--olive);
+  letter-spacing:.14em; text-transform:uppercase; text-align:center;
+  padding:4px 0 5px; line-height:1;
+}
+
+/* BODY */
+.body { flex:1; display:flex; flex-direction:column; gap:6px; padding:7px 10px; overflow:hidden; min-height:0; }
+
+/* ป้ายประเภทการควบรวม (สีอยู่ใน base.css) */
+.badge { padding:5px 10px; font-size:.72rem; letter-spacing:.05em; border-radius:7px; flex-shrink:0; }
+
+/* บริษัท A / B (แถวคงที่ ไม่ยืด) */
+.companies-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; flex-shrink:0; }
+.co-block { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 7px; }
+.co-header { display:flex; align-items:center; margin-bottom:5px; }
+.co-label {
+  font-family:'Cinzel',serif; font-size:.55rem; color:var(--gold);
+  letter-spacing:.07em; text-transform:uppercase;
+  display:flex; align-items:center; gap:4px;
+}
+.co-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* ชิปเลือกประเภทสินค้า */
+.type-grid { display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-bottom:5px; }
+.type-chip {
+  display:flex; align-items:center; gap:3px;
+  padding:2px 5px; border-radius:10px; border:1px solid;
+  font-size:.65rem; font-weight:600; cursor:pointer;
+  transition:opacity .15s;
+  white-space:nowrap; overflow:hidden; line-height:1.4;
+  position:relative;
+}
+/* ซ่อน radio จากสายตาแต่ยังโฟกัสด้วยคีย์บอร์ดได้ */
+.type-chip input[type=radio] {
+  position:absolute; width:1px; height:1px;
+  opacity:0; margin:0; pointer-events:none;
+}
+.type-chip.selected { opacity:1; }
+.type-chip:not(.selected) { opacity:.45; }
+.type-chip:focus-within { outline:2px solid var(--gold-lt); outline-offset:1px; opacity:1; }
+
+/* ปุ่มเพิ่ม/ลดจำนวน */
+.count-row { display:flex; align-items:center; gap:4px; }
+.count-lbl { font-size:.65rem; color:var(--text-dim); flex-shrink:0; }
+.cnt-btn {
+  width:24px; height:24px; border-radius:5px;
+  border:1px solid var(--border); background:var(--card2);
+  color:var(--gold-lt); font-size:.95rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.cnt-input {
+  flex:1; min-width:0;
+  background:var(--input-bg); border:1px solid var(--gold-dim); border-radius:5px;
+  color:var(--gold-lt); font-size:.95rem; font-weight:700;
+  text-align:center; padding:2px 0; outline:none;
+  font-family:'Cinzel',serif;
+}
+
+/* ส่วนเงิน (ยืดเต็มพื้นที่ที่เหลือ) */
+.money-section { flex:1; display:flex; flex-direction:column; gap:6px; min-height:0; }
+
+.results-row { display:grid; grid-template-columns:1fr 1fr; gap:6px; flex-shrink:0; }
+.res-box {
+  background:var(--card2); border:1px solid var(--border); border-radius:9px;
+  padding:7px 11px; display:flex; flex-direction:column; justify-content:center;
+}
+.res-box.accent { border-color:rgba(200,168,75,.5); background:rgba(200,168,75,.08); }
+.res-lbl  { font-family:'Cinzel',serif; font-size:.55rem; color:var(--text-dim); letter-spacing:.07em; text-transform:uppercase; margin-bottom:2px; }
+.res-val  { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+.res-unit { font-size:.6rem; color:var(--text-dim); margin-top:2px; }
+
+/* ขั้นบันไดราคา (เลื่อนแนวนอน) */
+.ladder-wrap { flex-shrink:0; }
+.ladder-lbl { font-family:'Cinzel',serif; font-size:.55rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px; }
+.ladder { display:flex; gap:5px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
+.ladder::-webkit-scrollbar { display:none; }
+.bid-pill { padding:6px 12px; border-radius:16px; font-size:.82rem; flex-shrink:0; transition:transform .1s; }
+.bid-pill:active { transform:scale(.95); }
+
+/* ราคาประมูล + ส่วนแบ่ง */
+.bid-split-row { display:grid; grid-template-columns:auto 1fr 1fr; gap:6px; align-items:stretch; flex:1; min-height:0; }
+.bid-tap {
+  background:var(--card2); border:1px solid var(--gold-dim); border-radius:10px;
+  padding:10px 12px; cursor:pointer; text-align:center;
+  display:flex; flex-direction:column; justify-content:center;
+  transition:background .15s; min-width:82px;
+  font:inherit; color:inherit;
+}
+.bid-tap:active { background:rgba(200,168,75,.15); }
+.bid-tap .bt-lbl  { font-family:'Cinzel',serif; font-size:.58rem; color:var(--gold-dim); letter-spacing:.07em; text-transform:uppercase; margin-bottom:5px; }
+.bid-tap .bt-val  { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+.bid-tap .bt-hint { font-size:.62rem; color:var(--text-dim); margin-top:5px; }
+.bid-tap.has-val .bt-val { color:var(--ok); }
+
+.split-box {
+  background:var(--card2); border:1px solid rgba(200,168,75,.2);
+  border-radius:10px; padding:10px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.split-box .sp-lbl  { font-family:'Cinzel',serif; font-size:.58rem; color:var(--text-dim); letter-spacing:.05em; text-transform:uppercase; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.split-box .sp-pct  { font-size:.72rem; color:var(--text-dim); margin-bottom:4px; }
+.split-box .sp-amt  { font-family:'Cinzel',serif; font-size:2.2rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+.split-box .sp-unit { font-size:.62rem; color:var(--text-dim); margin-top:3px; }
+
+/* สรุปสูตร */
+.formula { font-size:.68rem; color:var(--text-dim); line-height:1.5; flex-shrink:0; }
+.formula span { color:var(--text); }
+.formula b { color:var(--gold); }
+
+/* picker = กล่องกลางจอ */
+.picker-overlay { align-items:center; padding:20px; background:rgba(0,0,0,.72); }
+.picker-modal {
+  max-width:300px; border-radius:16px;
+  animation:popIn .2s ease;
+}
+@keyframes popIn {
+  from { transform:scale(.88); opacity:0; }
+  to   { transform:scale(1);   opacity:1; }
+}
+.picker-body { border-radius:0 0 16px 16px; }

@@ -1,0 +1,157 @@
+/* ชั้นพื้นฐานที่ใช้ร่วมกันทั้งสองหน้า — token · reset · สีสินค้า · bid pill · picker
+   โหลดไฟล์นี้ก่อน แล้วค่อยทับด้วย desktop.css หรือ mobile.css */
+
+:root {
+  /* พื้นหลังและกล่อง */
+  --bg:        #232e10;
+  --card:      #2e3918;
+  --card2:     #283215;
+  --input-bg:  #171f08;
+  --border:    #4a5520;
+
+  /* สีทอง (สีหลักของแบรนด์) */
+  --gold:      #c8a84b;
+  --gold-lt:   #e2c87a;
+  --gold-dim:  #8a7230;
+  --olive:     #7a8c3a;
+
+  /* ตัวอักษร */
+  --text:      #e8dba0;
+  --text-dim:  #8a9050;
+
+  /* สถานะ */
+  --red:       #c0392b;
+  --ok:        #90d060;
+
+  --shadow:    0 6px 30px rgba(0,0,0,0.7);
+
+  /* picker — แต่ละหน้าตั้งขนาดเองได้ */
+  --picker-item-h:     48px;
+  --picker-body-h:     240px;
+  --picker-font:       .95rem;
+  --picker-font-active: 1.2rem;
+  --picker-pad:        calc((var(--picker-body-h) - var(--picker-item-h)) / 2);
+  --picker-bg:         #2a3418;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sarabun', 'Segoe UI', sans-serif;
+}
+
+/* สีชิปสินค้า */
+.c-ship     { background:#152840; color:#7ec0e8; border-color:#1e5080; }
+.c-rice     { background:#1e3010; color:#90c060; border-color:#2a5015; }
+.c-spice    { background:#302010; color:#d4a030; border-color:#604010; }
+.c-rubber   { background:#281028; color:#c080b8; border-color:#603060; }
+.c-siapsaji { background:#301808; color:#e09050; border-color:#603010; }
+.c-oil      { background:#181818; color:#909090; border-color:#404040; }
+
+.dot-ship     { background:#2980b9; }
+.dot-rice     { background:#3a8a30; }
+.dot-spice    { background:#c09020; }
+.dot-rubber   { background:#8040a0; }
+.dot-siapsaji { background:#d06020; }
+.dot-oil      { background:#707070; }
+
+/* ป้ายประเภทการควบรวม */
+.badge {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: 8px;
+}
+.badge.normal   { background:rgba(200,168,75,.10); border-color:var(--gold-dim); color:var(--gold); }
+.badge.siapsaji { background:rgba(210,120,40,.12); border-color:#a05020;         color:#d4905a; }
+.badge.invalid  { background:rgba(180,40,30,.12);  border-color:#802020;         color:#c05040; }
+
+/* ขั้นบันไดราคา — สีสถานะใช้ร่วมกัน ขนาดแยกตามหน้า */
+.bid-pill {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  border: 1px solid;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bid-pill.first   { background:rgba(200,168,75,.20); border-color:var(--gold);    color:var(--gold-lt); }
+.bid-pill.current { background:rgba(200,168,75,.35); border-color:var(--gold-lt); color:var(--gold-lt); box-shadow:0 0 10px rgba(200,168,75,.35); }
+.bid-pill.past    { background:rgba(255,255,255,.02); border-color:var(--border); color:#4a5530; text-decoration:line-through; }
+.bid-pill.step    { background:rgba(255,255,255,.04); border-color:var(--border); color:var(--text-dim); }
+
+/* PICKER — เปลี่ยนขนาดได้ที่ตัวแปร --picker-* */
+.picker-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.68); z-index: 999;
+  justify-content: center;
+}
+.picker-overlay.show { display: flex; }
+
+.picker-modal {
+  background: var(--picker-bg);
+  border: 1px solid var(--gold-dim);
+  width: 100%;
+}
+
+.picker-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.picker-title {
+  font-family: 'Cinzel', serif; font-size: .72rem; color: var(--gold);
+  letter-spacing: .1em; text-transform: uppercase;
+}
+.picker-btn {
+  font-family: 'Cinzel', serif; font-size: .7rem;
+  padding: 6px 13px; border-radius: 6px; border: 1px solid;
+  cursor: pointer; background: transparent; letter-spacing: .06em;
+}
+.picker-btn.cancel  { border-color: var(--border); color: var(--text-dim); }
+.picker-btn.confirm { border-color: var(--gold); color: var(--gold-lt); background: rgba(200,168,75,.12); }
+.picker-btn:hover   { opacity: .8; }
+
+.picker-body { position: relative; height: var(--picker-body-h); overflow: hidden; }
+
+/* ไล่เฉดบน–ล่างให้ดูเหมือนวงล้อหมุน */
+.picker-body::before,
+.picker-body::after {
+  content: ''; position: absolute; left: 0; right: 0;
+  height: var(--picker-pad); z-index: 2; pointer-events: none;
+}
+.picker-body::before { top: 0;    background: linear-gradient(to bottom, var(--picker-bg), rgba(42,52,24,0)); }
+.picker-body::after  { bottom: 0; background: linear-gradient(to top,    var(--picker-bg), rgba(42,52,24,0)); }
+
+.picker-center-bar {
+  position: absolute; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  height: var(--picker-item-h); z-index: 1; pointer-events: none;
+  border-top: 1px solid var(--gold-dim);
+  border-bottom: 1px solid var(--gold-dim);
+  background: rgba(200,168,75,.08);
+}
+
+.picker-drum {
+  height: var(--picker-body-h); overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.picker-drum::-webkit-scrollbar { display: none; }
+
+.picker-item {
+  height: var(--picker-item-h);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: var(--picker-font);
+  color: var(--text-dim); scroll-snap-align: center; cursor: pointer;
+  transition: color .15s, font-size .15s;
+}
+.picker-item:first-child { margin-top: var(--picker-pad); }
+.picker-item:last-child  { margin-bottom: var(--picker-pad); }
+.picker-item.active { color: var(--gold-lt); font-size: var(--picker-font-active); font-weight: 700; }
+
+/* โฟกัสให้เห็นชัดสำหรับคีย์บอร์ด */
+:focus-visible { outline: 2px solid var(--gold-lt); outline-offset: 2px; }

@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=merger-calculator.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Indonesia – Merger Calculator</title>
+  <meta name="description" content="เครื่องคำนวณราคาประมูลควบรวมบริษัท (Phase 3 Merger) สำหรับบอร์ดเกม Indonesia ฉบับที่ 3" />
+  <meta name="theme-color" content="#232e10" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script>
+    /* ส่งไปหน้าที่เหมาะกับขนาดจอ — บังคับได้ด้วย ?v=desktop หรือ ?v=mobile */
+    (function () {
+      var forced = (location.search.match(/[?&]v=(desktop|mobile)/) || [])[1];
+      var mobile = forced ? forced === 'mobile' : window.matchMedia('(max-width: 767px)').matches;
+      location.replace(mobile ? 'merger-calculator-mobile.html' : 'merger-calculator.html');
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0; url=merger-calculator.html" /></noscript>
 </head>
-<body></body>
+<body style="background:#232e10;color:#8a9050;font-family:sans-serif;text-align:center;padding:40px 16px">
+  <p>กำลังเปิดเครื่องคำนวณ…</p>
+  <p>
+    <a href="merger-calculator.html" style="color:#c8a84b">หน้าจอใหญ่</a> ·
+    <a href="merger-calculator-mobile.html" style="color:#c8a84b">มือถือ</a>
+  </p>
+</body>
 </html>

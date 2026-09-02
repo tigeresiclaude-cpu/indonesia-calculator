@@ -1,0 +1,162 @@
+/* หน้า desktop (ทับ base.css) */
+
+:root {
+  --bg: #252d10;
+  /* picker บน desktop เป็น bottom sheet ตัวใหญ่กว่าเล็กน้อย */
+  --picker-item-h: 52px;
+  --picker-body-h: 260px;
+  --picker-font: 1rem;
+  --picker-font-active: 1.25rem;
+}
+
+body { min-height: 100vh; padding: 0 0 60px; }
+
+/* Hero */
+.hero {
+  background: #232e10;
+  border-bottom: 1px solid var(--gold-dim);
+  text-align: center;
+  padding: 0 16px 26px;
+  overflow: hidden;
+}
+.hero-ornament { width: 100%; max-width: 680px; margin: 0 auto; display: block; }
+.hero-logo-wrap {
+  border-left: 1px solid var(--gold-dim);
+  border-right: 1px solid var(--gold-dim);
+  padding: 6px 48px 10px;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-logo-wrap::before { content:'❧'; position:absolute; left:10px;  top:50%; transform:translateY(-50%);           color:var(--gold-dim); font-size:1.1rem; }
+.hero-logo-wrap::after  { content:'❧'; position:absolute; right:10px; top:50%; transform:translateY(-50%) scaleX(-1); color:var(--gold-dim); font-size:1.1rem; }
+.hero-title {
+  font-family: 'Pinyon Script', cursive;
+  font-size: clamp(3.2rem, 10vw, 5.4rem);
+  color: #d4c070;
+  line-height: 1;
+  text-shadow: 0 1px 8px rgba(180,150,40,.3);
+}
+.hero-edition {
+  font-family: 'Cinzel', serif;
+  font-size: .58rem; color: #8a7a38;
+  letter-spacing: .28em; text-transform: uppercase;
+  margin-top: 3px;
+}
+.hero-divider { display:flex; align-items:center; gap:10px; max-width:300px; margin:14px auto 0; }
+.hero-divider span { flex:1; height:1px; }
+.hero-divider span:first-child { background:linear-gradient(90deg,transparent,var(--gold-dim)); }
+.hero-divider span:last-child  { background:linear-gradient(90deg,var(--gold-dim),transparent); }
+.hero-subtitle {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: .68rem; color: var(--olive);
+  letter-spacing: .18em; text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* Layout */
+.main { max-width:720px; margin:0 auto; padding:24px 16px 0; display:flex; flex-direction:column; gap:18px; }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px 20px; box-shadow:var(--shadow); }
+.card-title { font-family:'Cinzel',serif; color:var(--gold); font-size:.82rem; letter-spacing:.1em; margin-bottom:14px; display:flex; align-items:center; gap:8px; text-transform:uppercase; }
+.card-title .dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.companies { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:500px) { .companies { grid-template-columns:1fr; } }
+.company-block { background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:14px; }
+.company-label { font-family:'Cinzel',serif; font-size:.65rem; color:var(--text-dim); margin-bottom:10px; letter-spacing:.1em; text-transform:uppercase; }
+
+.good-type-row { margin-bottom:7px; }
+.good-type-row label { display:flex; align-items:center; gap:7px; cursor:pointer; font-size:.88rem; }
+.good-type-row input[type=radio] { accent-color:var(--gold); cursor:pointer; }
+.good-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:20px; font-size:.78rem; font-weight:600; border:1px solid; }
+
+.goods-input-row { display:flex; align-items:center; gap:8px; margin-top:14px; }
+.goods-input-row label { font-size:.82rem; color:var(--text-dim); flex-shrink:0; }
+.goods-input {
+  width:68px; background:var(--input-bg); border:1px solid var(--gold-dim); border-radius:6px;
+  color:var(--gold-lt); font-size:1.2rem; font-weight:700; text-align:center;
+  padding:5px 4px; outline:none; transition:border-color .15s; font-family:'Cinzel',serif;
+}
+.goods-input:focus { border-color:var(--gold); }
+.stepper { display:flex; gap:4px; }
+.step-btn {
+  width:28px; height:28px; border-radius:5px; border:1px solid var(--border);
+  background:#1e2610; color:var(--gold-lt); font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:background .15s;
+}
+.step-btn:hover { background:rgba(200,168,75,.18); }
+
+/* ป้ายประเภทการควบรวม (สีอยู่ใน base.css) */
+.badge { padding:8px 12px; font-size:.72rem; letter-spacing:.1em; transition:all .3s; }
+
+/* Result card */
+.result-card {
+  background:var(--card2); border:1px solid var(--gold-dim); border-radius:10px;
+  padding:20px 20px 16px; box-shadow:var(--shadow),0 0 40px rgba(200,168,75,.05);
+  position:relative; overflow:hidden;
+}
+.result-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(200,168,75,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+.result-title { font-family:'Cinzel',serif; color:var(--gold-lt); font-size:.82rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:16px; }
+
+.result-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+@media (max-width:460px) { .result-grid { grid-template-columns:1fr; } }
+.result-box { background:rgba(0,0,0,.3); border-radius:8px; padding:13px 14px; border:1px solid rgba(200,168,75,.15); }
+.result-box .lbl  { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); margin-bottom:5px; letter-spacing:.1em; text-transform:uppercase; }
+.result-box .val  { font-family:'Cinzel',serif; font-size:1.8rem; font-weight:700; color:var(--gold-lt); line-height:1; }
+.result-box .unit { font-size:.68rem; color:var(--text-dim); margin-top:3px; }
+.result-box.accent { border-color:rgba(200,168,75,.45); background:rgba(200,168,75,.07); }
+
+/* Ladder */
+.ladder-lbl { font-family:'Cinzel',serif; font-size:.62rem; color:var(--text-dim); letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+.ladder { display:flex; flex-wrap:wrap; gap:6px; }
+.bid-pill { padding:4px 12px; border-radius:20px; font-size:.78rem; transition:transform .1s, box-shadow .1s; }
+.bid-pill:hover { transform:scale(1.09); box-shadow:0 0 8px rgba(200,168,75,.35); }
+
+/* ราคาที่ประมูลได้จริง */
+.bid-section { margin-top:18px; padding-top:16px; border-top:1px solid var(--border); }
+.bid-section-title { font-family:'Cinzel',serif; font-size:.72rem; color:var(--gold); letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px; }
+.bid-input-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.bid-input-row label { font-size:.85rem; color:var(--text-dim); flex-shrink:0; }
+.bid-actual {
+  width:110px; background:var(--input-bg); border:1px solid var(--gold-dim);
+  border-radius:6px; color:var(--gold-lt); font-size:1.2rem; font-weight:700;
+  text-align:center; padding:6px 8px; outline:none; transition:border-color .15s;
+  font-family:'Cinzel',serif; cursor:pointer;
+}
+.bid-actual:focus { border-color:var(--gold); }
+.bid-actual.invalid-bid { border-color:var(--red); color:#e07060; }
+.bid-actual.valid-bid   { border-color:#4a8a30; color:var(--ok); }
+
+.bid-error { font-size:.78rem; color:#d06050; padding:4px 0; display:none; }
+.bid-error.show { display:block; }
+
+/* ส่วนแบ่ง */
+.split-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+@media (max-width:460px) { .split-grid { grid-template-columns:1fr; } }
+.split-box { background:rgba(0,0,0,.35); border-radius:8px; padding:12px 14px; border:1px solid rgba(200,168,75,.3); }
+.split-box .s-lbl { font-family:'Cinzel',serif; font-size:.6rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+.split-box .s-pct { font-size:.75rem; color:var(--text-dim); margin-bottom:2px; }
+.split-box .s-amount { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold-lt); line-height:1.1; }
+.split-box .s-unit { font-size:.65rem; color:var(--text-dim); margin-top:2px; }
+
+/* สรุปสูตร */
+.breakdown { margin-top:14px; font-size:.82rem; color:var(--text-dim); line-height:1.9; border-top:1px solid var(--border); padding-top:12px; }
+.breakdown span { color:var(--text); }
+.breakdown b { color:var(--gold); font-weight:600; }
+
+footer { text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid var(--border); color:var(--text-dim); font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.15em; opacity:.5; }
+
+/* picker = แผ่นเลื่อนขึ้นจากขอบล่าง */
+.picker-overlay { align-items: flex-end; }
+.picker-modal {
+  max-width: 480px; border-radius: 16px 16px 0 0;
+  animation: slideUp .22s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.picker-body { border-radius: 0; }
